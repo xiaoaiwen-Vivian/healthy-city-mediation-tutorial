@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "Please cite the manuscript and the exact released version of this reproduction material. The DOI below belongs to the manuscript, not the code archive."
+type: software
+version: "1.0.0"
+title: "Reproducibility materials for A practical tutorial on mediation analysis with clustered data in health psychology"
+authors:
+  - family-names: Wen
+    given-names: Xiaoai
+  - family-names: Hu
+    given-names: Chun-Chieh
+preferred-citation:
+  type: article
+  title: "A practical tutorial on mediation analysis with clustered data in health psychology"
+  authors:
+    - family-names: Wen
+      given-names: Xiaoai
+    - family-names: Hu
+      given-names: Chun-Chieh
+  journal: Research Square
+  year: 2026
+  doi: 10.21203/rs.3.rs-11370584/v1
