@@ -1,0 +1,232 @@
+{
+  "mode": "full-estimation",
+  "passed": true,
+  "reference_csv_files_checked": 36,
+  "checks": [
+    {
+      "file": "individual_fe_sensitivity.csv",
+      "rows": 4,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "python/all_bh_families.csv",
+      "rows": 42,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "python/city_adjusted.csv",
+      "rows": 6,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "python/city_draws_Green.csv",
+      "rows": 2000,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "python/city_draws_Medical.csv",
+      "rows": 2000,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "python/city_draws_PM25.csv",
+      "rows": 2000,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "python/city_draws_Road.csv",
+      "rows": 2000,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "python/city_draws_SO2.csv",
+      "rows": 2000,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "python/city_draws_Social.csv",
+      "rows": 2000,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "python/city_results.csv",
+      "rows": 6,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "python/component_adjusted.csv",
+      "rows": 24,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "python/component_paths.csv",
+      "rows": 24,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "python/individual_adjusted.csv",
+      "rows": 6,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "python/individual_draws_Green.csv",
+      "rows": 2000,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "python/individual_draws_Medical.csv",
+      "rows": 2000,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "python/individual_draws_PM25.csv",
+      "rows": 2000,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "python/individual_draws_Road.csv",
+      "rows": 2000,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "python/individual_draws_SO2.csv",
+      "rows": 2000,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "python/individual_draws_Social.csv",
+      "rows": 2000,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "python/individual_results.csv",
+      "rows": 6,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "python/individual_sign_bh_worked.csv",
+      "rows": 6,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "python/recalculated_intervals.csv",
+      "rows": 12,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "python/sample_flow.csv",
+      "rows": 4,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "python/sample_sizes.csv",
+      "rows": 6,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "python/sobel_bh_worked.csv",
+      "rows": 6,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "stata/all_bh_families.csv",
+      "rows": 42,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "stata/city_adjusted.csv",
+      "rows": 6,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "stata/city_draws_Green.csv",
+      "rows": 2000,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "stata/city_draws_Medical.csv",
+      "rows": 2000,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "stata/city_draws_PM25.csv",
+      "rows": 2000,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "stata/city_draws_Road.csv",
+      "rows": 2000,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "stata/city_draws_SO2.csv",
+      "rows": 2000,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "stata/city_draws_Social.csv",
+      "rows": 2000,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "stata/city_results.csv",
+      "rows": 6,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "stata/component_paths.csv",
+      "rows": 24,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    },
+    {
+      "file": "wild/wild_cluster_9999.csv",
+      "rows": 13,
+      "passed": true,
+      "max_scaled_difference": 0.0
+    }
+  ],
+  "shared_schedule_exact_match": true,
+  "city_draws_stata_python_agree": true,
+  "common_sample_counts_and_coefficients_agree": true,
+  "BH_hypothesis_testing_families": 5,
+  "BH_descriptive_groups": 2,
+  "members_per_family_or_group": 6,
+  "numeric_table_exports": 10,
+  "reference_used_for_estimation": false,
+  "note": "All estimates and bootstrap draws were regenerated from the supplied linked input in an empty results directory."
+}

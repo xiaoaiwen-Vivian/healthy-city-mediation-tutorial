@@ -1,0 +1,52 @@
+Hypothesis-test inputs: city Sobel p values and BH adjustments across six candidates.
+Mediator  Sobel_p  Sobel_BH_6
+   Green 0.544331    0.857975
+    Road 0.935901    0.935901
+     SO2 0.633767    0.857975
+ Medical 0.714979    0.857975
+    PM25 0.539895    0.857975
+  Social 0.045049    0.270291
+Descriptive bootstrap calculations below: these values do not determine statistical significance.
+City
+Mediator  sign_tail  sign_tail_BH
+   Green   0.639680      0.958521
+    Road   0.958521      0.958521
+     SO2   0.938531      0.958521
+ Medical   0.756622      0.958521
+    PM25   0.578711      0.958521
+  Social   0.056972      0.341829
+Individual
+Mediator  sign_tail  sign_tail_BH
+   Green   0.005997      0.035982
+    Road   0.914543      0.914543
+     SO2   0.235882      0.471764
+ Medical   0.610695      0.732834
+    PM25   0.418791      0.628186
+  Social   0.041979      0.125937
+     Level Sample Path Mediator            p           BH
+      City Common    a    Green 5.285372e-01 5.868045e-01
+      City Common    b    Green 3.638865e-02 1.091659e-01
+Individual Common    a    Green 3.411904e-06 4.094285e-06
+Individual Common    b    Green 5.049780e-03 1.514934e-02
+      City Common    a     Road 2.663414e-02 6.391117e-02
+      City Common    b     Road 9.360331e-01 9.360331e-01
+Individual Common    a     Road 4.849754e-77 1.454926e-76
+Individual Common    b     Road 9.247337e-01 9.247337e-01
+      City Common    a      SO2 5.868045e-01 5.868045e-01
+      City Common    b      SO2 3.301251e-01 6.602501e-01
+Individual Common    a      SO2 1.427460e-06 2.141190e-06
+Individual Common    b      SO2 2.339885e-01 4.679769e-01
+      City Common    a  Medical 3.195558e-02 6.391117e-02
+      City Common    b  Medical 7.119101e-01 8.542921e-01
+Individual Common    a  Medical 1.285014e-80 7.710084e-80
+Individual Common    b  Medical 6.102217e-01 7.322660e-01
+      City Common    a     PM25 8.711462e-02 1.306719e-01
+      City Common    b     PM25 5.137329e-01 7.705993e-01
+Individual Common    a     PM25 9.136896e-55 1.827379e-54
+Individual Common    b     PM25 4.277305e-01 6.415958e-01
+      City Common    a   Social 2.817283e-02 6.391117e-02
+      City Common    b   Social 1.477878e-05 8.867267e-05
+Individual Common    a   Social 4.723819e-02 4.723819e-02
+Individual Common    b   Social 1.446820e-07 8.680918e-07
+Five hypothesis-testing families and two descriptive groups; six candidates in each.
+All 42 calculations agree with SciPy. The 12 descriptive calculations are not FDR-controlled significance tests.

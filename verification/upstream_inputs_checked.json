@@ -1,0 +1,282 @@
+[
+  {
+    "input": "$citybook",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$covidbook",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$harmonized/H_CHARLS_D_Data 2.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$harmonizedC/H_CHARLS_C_Data.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$municipal",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$pm25",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2011/Demographic_Background.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2011/Household_Income.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2011/biomarkers.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2011/family_information.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2011/family_transfer.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2011/health_care_and_insurance.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2011/health_status_and_functioning.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2011/household_roster.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2011/housing_characteristics.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2011/individual_income.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2011/interviewer_observation.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2011/psu.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2011/work_retirement_and_pension.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2013/Biomarker.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2013/Demographic_Background.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2013/Family_Information.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2013/Family_Transfer.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2013/Health_Care_and_Insurance.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2013/Health_Status_and_Functioning.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2013/Household_Income.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2013/Housing_Characteristics.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2013/Individual_Income.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2013/PSU.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2013/Work_Retirement_and_Pension.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2015/Biomarker.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2015/Demographic_Background.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2015/Family_Information.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2015/Family_Transfer.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2015/Health_Care_and_Insurance.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2015/Health_Status_and_Functioning.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2015/Household_Income.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2015/Housing_Characteristics.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2015/Individual_Income.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2018/Cognition.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2018/Demographic_Background.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2018/Family_Transfer.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2018/Health_Care_and_Insurance.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2018/Health_Status_and_Functioning.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2018/Household_Income.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2018/Individual_Income.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2018/Pension.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2018/Work_Retirement.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2020/Demographic_Background.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2020/Family_Information.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2020/Health_Status_and_Functioning.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2020/Household_Income.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2020/Individual_Income.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2020/Sample_Infor.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2020/Weights.dta",
+    "exists": true,
+    "matches_reference": true
+  },
+  {
+    "input": "$raw2020/Work_Retirement.dta",
+    "exists": true,
+    "matches_reference": true
+  }
+]

@@ -1,0 +1,322 @@
+--------------------------------------------------------------------------------------------------------------------------------------------
+      name:  felog
+       log:  <LOCAL_HOME>/Documents/honor thesis/hpr_reproducibility_release_20261103/HealthyCity_Mediation_Reproducibility/runs/full_202611
+> 03_125706_909486/logs/individual_fe_sensitivity.log
+  log type:  text
+ opened on:   3 Nov 2026, 12:57:51
+
+. 
+. use "`input_path'", clear
+(Harmonized CHARLS Ver.D)
+
+. rename (ID iwy treat rgoingl) (person_id year treated outcome)
+
+. replace city=strtrim(city)
+(0 real changes made)
+
+. drop if missing(person_id) | missing(city) | missing(year)
+(1,310 observations deleted)
+
+. drop if missing(wave)
+(0 observations deleted)
+
+. keep if age>=45 & age<. & rural==0
+(51,158 observations deleted)
+
+. capture drop did
+
+. generate double did=treated*(year>=2017)
+
+. egen long city_id=group(city)
+
+. egen long respondent_id=group(person_id)
+
+. local controls gender marry log_real_inc_per rwork rural2 edu ///
+>     hchild retire adlab_c smoken drinkl srh age
+
+. 
+. * Retain the policy model's complete observations before comparing fixed effects.
+. quietly reghdfe outcome did `controls', ///
+>     absorb(city_id year) vce(cluster city_id)
+
+. generate byte baseline=e(sample)
+
+. quietly count if baseline
+
+. local baselineN=r(N)
+
+. tempfile eligible summary
+
+. save `eligible'
+file /var/folders/b2/mrhxck5j5898_27nb6sn5h5w0000gn/T//St50453.000001 saved as .dta format
+
+. tempname results
+
+. postfile `results' str24 Fixed_effects str12 Clustering ///
+>     long(N Respondents Cities Excluded_from_baseline) ///
+>     double(Coef SE P CI_L CI_U Residual_df) using `summary'
+
+. 
+. foreach fixed in City Individual {
+  2.     use `eligible', clear
+  3.     local absorbed city_id
+  4.     if "`fixed'"=="Individual" local absorbed respondent_id
+  5.     local sample_set 0
+  6.     foreach level in Individual City {
+  7.         local cluster respondent_id
+  8.         if "`level'"=="City" local cluster city_id
+  9.         display "FIXED EFFECTS: `fixed' and year; CLUSTERING: `level'"
+ 10.         reghdfe outcome did `controls' if baseline, ///
+>             absorb(`absorbed' year) vce(cluster `cluster')
+ 11.         if !`sample_set' {
+ 12.             generate byte fixed_sample=e(sample)
+ 13.             local sample_set 1
+ 14.         }
+ 15.         assert e(sample)==fixed_sample
+ 16.         scalar coef=_b[did]
+ 17.         scalar se=_se[did]
+ 18.         scalar pvalue=2*ttail(e(df_r),abs(scalar(coef)/scalar(se)))
+ 19.         scalar lower=scalar(coef)-invttail(e(df_r),.025)*scalar(se)
+ 20.         scalar upper=scalar(coef)+invttail(e(df_r),.025)*scalar(se)
+ 21.         local N=e(N)
+ 22.         local df=e(df_r)
+ 23.         tempvar person_tag city_tag
+ 24.         egen byte `person_tag'=tag(respondent_id) if e(sample)
+ 25.         quietly count if `person_tag'==1
+ 26.         local persons=r(N)
+ 27.         egen byte `city_tag'=tag(city_id) if e(sample)
+ 28.         quietly count if `city_tag'==1
+ 29.         local cities=r(N)
+ 30.         local excluded=`baselineN'-`N'
+ 31.         post `results' ("`fixed' + year") ("`level'") ///
+>             (`N') (`persons') (`cities') (`excluded') ///
+>             (scalar(coef)) (scalar(se)) (scalar(pvalue)) ///
+>             (scalar(lower)) (scalar(upper)) (`df')
+ 32.     }
+ 33. }
+(Harmonized CHARLS Ver.D)
+FIXED EFFECTS: City and year; CLUSTERING: Individual
+(MWFE estimator converged in 5 iterations)
+
+HDFE Linear regression                            Number of obs   =     16,661
+Absorbing 2 HDFE groups                           F(  14,   7994) =      63.89
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.1318
+                                                  Adj R-squared   =     0.1260
+                                                  Within R-sq.    =     0.0968
+Number of clusters (respondent_id) =      7,995   Root MSE        =     0.6976
+
+                          (Std. err. adjusted for 7,995 clusters in respondent_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+         outcome | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+             did |  -.0866795   .0278562    -3.11   0.002    -.1412849    -.032074
+          gender |  -.0461119   .0152335    -3.03   0.002    -.0759735   -.0162503
+           marry |  -.1147333   .0206277    -5.56   0.000    -.1551689   -.0742976
+log_real_inc_per |  -.0472414   .0057085    -8.28   0.000    -.0584316   -.0360511
+           rwork |    .023662   .0148073     1.60   0.110    -.0053643    .0526882
+          rural2 |   .0183742   .0186856     0.98   0.325    -.0182545    .0550028
+             edu |  -.0426202   .0065973    -6.46   0.000    -.0555526   -.0296877
+          hchild |  -.0042275   .0066622    -0.63   0.526    -.0172872    .0088322
+          retire |  -.0365471   .0160857    -2.27   0.023    -.0680792    -.005015
+         adlab_c |   .1512895    .011147    13.57   0.000     .1294384    .1731405
+          smoken |   .0268727    .016038     1.68   0.094    -.0045659    .0583114
+          drinkl |  -.0197999   .0132326    -1.50   0.135    -.0457392    .0061395
+             srh |  -.1132398   .0070289   -16.11   0.000    -.1270183   -.0994613
+             age |  -.0016141   .0009347    -1.73   0.084    -.0034463    .0002182
+           _cons |   2.359321   .0909491    25.94   0.000     2.181037    2.537604
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     city_id |        94           0          94     |
+        year |         5           1           4     |
+-----------------------------------------------------+
+FIXED EFFECTS: City and year; CLUSTERING: City
+(MWFE estimator converged in 5 iterations)
+
+HDFE Linear regression                            Number of obs   =     16,661
+Absorbing 2 HDFE groups                           F(  14,     93) =      46.95
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.1318
+                                                  Adj R-squared   =     0.1260
+                                                  Within R-sq.    =     0.0968
+Number of clusters (city_id) =         94         Root MSE        =     0.6976
+
+                                   (Std. err. adjusted for 94 clusters in city_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+         outcome | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+             did |  -.0866795   .0330454    -2.62   0.010     -.152301   -.0210579
+          gender |  -.0461119   .0154226    -2.99   0.004    -.0767382   -.0154856
+           marry |  -.1147333   .0214939    -5.34   0.000     -.157416   -.0720506
+log_real_inc_per |  -.0472414   .0062431    -7.57   0.000    -.0596389   -.0348438
+           rwork |    .023662   .0151108     1.57   0.121    -.0063452    .0536691
+          rural2 |   .0183742   .0219053     0.84   0.404    -.0251253    .0618737
+             edu |  -.0426202   .0071873    -5.93   0.000    -.0568926   -.0283477
+          hchild |  -.0042275   .0069418    -0.61   0.544    -.0180126    .0095576
+          retire |  -.0365471   .0145484    -2.51   0.014    -.0654373   -.0076569
+         adlab_c |   .1512895   .0117215    12.91   0.000     .1280129     .174566
+          smoken |   .0268727   .0139611     1.92   0.057    -.0008512    .0545967
+          drinkl |  -.0197999   .0137448    -1.44   0.153    -.0470942    .0074945
+             srh |  -.1132398   .0078005   -14.52   0.000    -.1287301   -.0977495
+             age |  -.0016141   .0008721    -1.85   0.067    -.0033458    .0001176
+           _cons |   2.359321   .0985391    23.94   0.000     2.163641       2.555
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     city_id |        94          94           0    *|
+        year |         5           1           4     |
+-----------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(Harmonized CHARLS Ver.D)
+FIXED EFFECTS: Individual and year; CLUSTERING: Individual
+(dropped 3082 singleton observations)
+(MWFE estimator converged in 6 iterations)
+note: gender is probably collinear with the fixed effects (all partialled-out values are close to zero; tol = 1.0e-09)
+note: age is probably collinear with the fixed effects (all partialled-out values are close to zero; tol = 1.0e-09)
+
+HDFE Linear regression                            Number of obs   =     13,579
+Absorbing 2 HDFE groups                           F(  12,   4912) =      10.24
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.5199
+                                                  Adj R-squared   =     0.2463
+                                                  Within R-sq.    =     0.0212
+Number of clusters (respondent_id) =      4,913   Root MSE        =     0.6521
+
+                          (Std. err. adjusted for 4,913 clusters in respondent_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+         outcome | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+             did |  -.0998453   .0373933    -2.67   0.008    -.1731529   -.0265376
+          gender |          0  (omitted)
+           marry |  -.1117503   .0509041    -2.20   0.028    -.2115451   -.0119554
+log_real_inc_per |  -.0230015   .0082714    -2.78   0.005    -.0392172   -.0067858
+           rwork |     .00063   .0234199     0.03   0.979    -.0452836    .0465435
+          rural2 |   .0832623   .0453894     1.83   0.067    -.0057213    .1722458
+             edu |   .0131641   .0231195     0.57   0.569    -.0321605    .0584888
+          hchild |  -.0172074   .0207707    -0.83   0.407    -.0579272    .0235124
+          retire |  -.0537571   .0337995    -1.59   0.112    -.1200192    .0125051
+         adlab_c |   .1033711   .0167021     6.19   0.000     .0706276    .1361147
+          smoken |  -.0114607   .0427701    -0.27   0.789    -.0953092    .0723878
+          drinkl |  -.0155739   .0251378    -0.62   0.536    -.0648552    .0337074
+             srh |  -.0738002   .0109956    -6.71   0.000    -.0953565   -.0522439
+             age |          0  (omitted)
+           _cons |   1.801595   .1177653    15.30   0.000     1.570723    2.032468
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-------------------------------------------------------+
+   Absorbed FE | Categories  - Redundant  = Num. Coefs |
+---------------+---------------------------------------|
+ respondent_id |      4913        4913           0    *|
+          year |         5           1           4     |
+-------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+FIXED EFFECTS: Individual and year; CLUSTERING: City
+(dropped 3082 singleton observations)
+(MWFE estimator converged in 6 iterations)
+note: gender is probably collinear with the fixed effects (all partialled-out values are close to zero; tol = 1.0e-09)
+note: age is probably collinear with the fixed effects (all partialled-out values are close to zero; tol = 1.0e-09)
+
+HDFE Linear regression                            Number of obs   =     13,579
+Absorbing 2 HDFE groups                           F(  12,     93) =      12.17
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.5199
+                                                  Adj R-squared   =     0.2463
+                                                  Within R-sq.    =     0.0212
+Number of clusters (city_id) =         94         Root MSE        =     0.6521
+
+                                   (Std. err. adjusted for 94 clusters in city_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+         outcome | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+             did |  -.0998453    .046192    -2.16   0.033    -.1915734   -.0081172
+          gender |          0  (omitted)
+           marry |  -.1117503   .0542872    -2.06   0.042    -.2195538   -.0039467
+log_real_inc_per |  -.0230015   .0084912    -2.71   0.008    -.0398633   -.0061397
+           rwork |     .00063   .0224436     0.03   0.978    -.0439385    .0451985
+          rural2 |   .0832623   .0366342     2.27   0.025      .010514    .1560105
+             edu |   .0131641   .0235082     0.56   0.577    -.0335185    .0598468
+          hchild |  -.0172074   .0224912    -0.77   0.446    -.0618704    .0274557
+          retire |  -.0537571   .0335179    -1.60   0.112     -.120317    .0128028
+         adlab_c |   .1033711   .0168808     6.12   0.000     .0698492    .1368931
+          smoken |  -.0114607   .0359692    -0.32   0.751    -.0828885     .059967
+          drinkl |  -.0155739   .0248811    -0.63   0.533    -.0649829     .033835
+             srh |  -.0738002    .010375    -7.11   0.000    -.0944029   -.0531976
+             age |          0  (omitted)
+           _cons |   1.801595   .1211182    14.87   0.000     1.561079    2.042112
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-------------------------------------------------------+
+   Absorbed FE | Categories  - Redundant  = Num. Coefs |
+---------------+---------------------------------------|
+ respondent_id |      4913        4913           0    *|
+          year |         5           1           4     |
+-------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+
+. postclose `results'
+
+. use `summary', clear
+
+. format Coef SE P CI_L CI_U %12.8f
+
+. list, noobs abbreviate(25)
+
+  +--------------------------------------------------------------------------------------------------------------------------------+
+  |     Fixed_effects | Clustering |     N | Respondents | Cities | Excluded_from_baseline |        Coef |         SE |          P |
+  |       City + year | Individual | 16661 |        7995 |     94 |                      0 | -0.08667948 | 0.02785622 | 0.00186685 |
+  |--------------------------------------------------------------------------------------------------------------------------------|
+  |                      CI_L                |                      CI_U                |               Residual_df                |
+  |               -0.14128493                |               -0.03207402                |                      7994                |
+  +--------------------------------------------------------------------------------------------------------------------------------+
+
+  +--------------------------------------------------------------------------------------------------------------------------------+
+  |     Fixed_effects | Clustering |     N | Respondents | Cities | Excluded_from_baseline |        Coef |         SE |          P |
+  |       City + year |       City | 16661 |        7995 |     94 |                      0 | -0.08667948 | 0.03304536 | 0.01018431 |
+  |--------------------------------------------------------------------------------------------------------------------------------|
+  |                      CI_L                |                      CI_U                |               Residual_df                |
+  |               -0.15230102                |               -0.02105794                |                        93                |
+  +--------------------------------------------------------------------------------------------------------------------------------+
+
+  +--------------------------------------------------------------------------------------------------------------------------------+
+  |     Fixed_effects | Clustering |     N | Respondents | Cities | Excluded_from_baseline |        Coef |         SE |          P |
+  | Individual + year | Individual | 13579 |        4913 |     94 |                   3082 | -0.09984526 | 0.03739332 | 0.00760701 |
+  |--------------------------------------------------------------------------------------------------------------------------------|
+  |                      CI_L                |                      CI_U                |               Residual_df                |
+  |               -0.17315288                |               -0.02653764                |                      4912                |
+  +--------------------------------------------------------------------------------------------------------------------------------+
+
+  +--------------------------------------------------------------------------------------------------------------------------------+
+  |     Fixed_effects | Clustering |     N | Respondents | Cities | Excluded_from_baseline |        Coef |         SE |          P |
+  | Individual + year |       City | 13579 |        4913 |     94 |                   3082 | -0.09984526 | 0.04619197 | 0.03322227 |
+  |--------------------------------------------------------------------------------------------------------------------------------|
+  |                      CI_L                |                      CI_U                |               Residual_df                |
+  |               -0.19157336                |               -0.00811716                |                        93                |
+  +--------------------------------------------------------------------------------------------------------------------------------+
+
+. export delimited using "results/individual_fe_sensitivity.csv", replace
+(file results/individual_fe_sensitivity.csv not found)
+file results/individual_fe_sensitivity.csv saved
+
+. display "Completed: two fixed-effect specifications, each with individual and city clustering."
+Completed: two fixed-effect specifications, each with individual and city clustering.
+
+. log close felog
+      name:  felog
+       log:  <LOCAL_HOME>/Documents/honor thesis/hpr_reproducibility_release_20261103/HealthyCity_Mediation_Reproducibility/runs/full_202611
+> 03_125706_909486/logs/individual_fe_sensitivity.log
+  log type:  text
+ closed on:   3 Nov 2026, 12:57:52
+--------------------------------------------------------------------------------------------------------------------------------------------

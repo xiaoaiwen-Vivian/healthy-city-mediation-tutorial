@@ -1,0 +1,18 @@
+{
+  "estimation_core_byte_identical_to_previous_package": true,
+  "core_files": [
+    "case_core.py",
+    "individual_core.py",
+    "case_python.py",
+    "case_stata.do",
+    "city_core.mata",
+    "city_bootstrap.mata",
+    "wild_cluster.do",
+    "individual_fe_sensitivity.do",
+    "inference.py",
+    "shared_draw_counts_94.csv",
+    "upstream/build_input.do"
+  ],
+  "all_36_frozen_reference_CSVs_byte_identical": true,
+  "executed_analysis_code_matches_release_code": true
+}

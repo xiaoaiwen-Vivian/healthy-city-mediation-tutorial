@@ -1,0 +1,15 @@
+{
+  "mode": "full-estimation",
+  "passed": true,
+  "reference_csv_files_checked": 36,
+  "shared_schedule_exact_match": true,
+  "city_draws_stata_python_agree": true,
+  "common_sample_counts_and_coefficients_agree": true,
+  "BH_hypothesis_testing_families": 5,
+  "BH_descriptive_groups": 2,
+  "members_per_family_or_group": 6,
+  "numeric_table_exports": 10,
+  "reference_used_for_estimation": false,
+  "note": "All estimates and bootstrap draws were regenerated from the supplied linked input in an empty results directory."
+}
+ALL_RESULTS_VERIFIED

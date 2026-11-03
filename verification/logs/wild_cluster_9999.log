@@ -1,0 +1,2000 @@
+--------------------------------------------------------------------------------------------------------------------------------------------
+      name:  wcb_log
+       log:  <LOCAL_HOME>/Documents/honor thesis/hpr_reproducibility_release_20261103/HealthyCity_Mediation_Reproducibility/runs/full_202611
+> 03_125706_909486/logs/wild_cluster_9999.log
+  log type:  text
+ opened on:   3 Nov 2026, 12:57:52
+
+. adopath ++ "vendor/boottest"
+  [1]              "vendor/boottest"
+  [2]              "<LOCAL_HOME>/Documents/honor thesis/hpr_reproducibility_release_20261103/HealthyCity_Mediation_Reproducibility/runs/full
+> _20261103_125706_909486/vendor/boottest"
+  [3]              "<LOCAL_HOME>/Documents/honor thesis/hpr_reproducibility_release_20261103/HealthyCity_Mediation_Reproducibility/runs/full
+> _20261103_125706_909486/vendor/stata/m"
+  [4]              "<LOCAL_HOME>/Documents/honor thesis/hpr_reproducibility_release_20261103/HealthyCity_Mediation_Reproducibility/runs/full
+> _20261103_125706_909486/vendor/stata/s"
+  [5]              "<LOCAL_HOME>/Documents/honor thesis/hpr_reproducibility_release_20261103/HealthyCity_Mediation_Reproducibility/runs/full
+> _20261103_125706_909486/vendor/stata/l"
+  [6]              "<LOCAL_HOME>/Documents/honor thesis/hpr_reproducibility_release_20261103/HealthyCity_Mediation_Reproducibility/runs/full
+> _20261103_125706_909486/vendor/stata/f"
+  [7]              "<LOCAL_HOME>/Documents/honor thesis/hpr_reproducibility_release_20261103/HealthyCity_Mediation_Reproducibility/runs/full
+> _20261103_125706_909486/vendor/stata/r"
+  [8]  (BASE)      "/Applications/Stata/ado/base/"
+  [9]  (SITE)      "/Applications/Stata/ado/site/"
+  [10]             "."
+  [11] (PERSONAL)  "/Applications/Stata/personal/"
+  [12] (PLUS)      "<LOCAL_HOME>/Documents/honor thesis/hpr_reproducibility_release_20261103/HealthyCity_Mediation_Reproducibility/runs/full
+> _20261103_125706_909486/vendor/stata/"
+  [13] (OLDPLACE)  "/Applications/Stata/myado/"
+  [14]             "/Applications/Stata/plus"
+  [15]             "/Applications/Stata/github"
+  [16]             "/Applications/Stata/personal"
+
+. mata: mata mlib index
+.mlib libraries to be searched are now
+    lmatabase;lmatamcmc;lmatabma;lmatacollect;lmatatab;lmataivqreg;lmatamixlog;lmatami;lmatasem;lmatagsem;lmatasp;lmatapss;lmatalasso;lmatap
+> ostest;lmatapath;lmatameta;lmataopt;lmatasvy;lmatajm;lmatanumlib;lmatahetdid;lmataado;lmataerm;lmatafc;lboottest;lftools;lfrcount;ltihtest
+> 13;lprecoin;lrecursyst;lxtdpdqml;livreg2;lxtdpdgmm;lintsolver;lsynth_mata_subr;lkdens;lplssem;ltihtest12;lxtabond2;lasdoc;lsqbm;lasreg;lsp
+> lagvar;lnearstat;lsfpanel;lsq;lmatrixtools;lparallel;lnpsf;lsynth2_mata_subr;lspreg;lportheory;lxtplfc;lintegrate;ltimbimata;lxsmle;lcoin;
+> lamcmc;lsgl;lcmp;lextreme;lconfa;lew;lmmtxttool;librecycle;lgeochart;lfreduse;lasn;llrcov;ltihtest11;lmcmclinear;lsftfe;lxthreg;lgetsymbol
+> s;lxtspj;lsfcross;lcem;l_cfrmt;lghk2;lspmat;llog2markup;lsomersd;lpoparms;lrcpoisson;lkhb
+
+. which reghdfe
+<LOCAL_HOME>/Documents/honor thesis/hpr_reproducibility_release_20261103/HealthyCity_Mediation_Reproducibility/runs/full_20261103_125706_909
+> 486/vendor/stata/r/reghdfe.ado
+*! version 6.13.1 10Jan2026
+
+. which boottest
+vendor/boottest/boottest.ado
+*! boottest 4.5.5 24 October 2026
+*! Copyright (C) 2015-26 David Roodman
+
+. display "Stata version: " c(stata_version)
+Stata version: 18
+
+. display "Restricted wild cluster bootstrap-t: Rademacher, city clustering"
+Restricted wild cluster bootstrap-t: Rademacher, city clustering
+
+. display "Seed: 2025; requested replications: `repetitions'; confidence level: 95%"
+Seed: 2025; requested replications: 9999; confidence level: 95%
+
+. 
+. use "`input_path'", clear
+(Harmonized CHARLS Ver.D)
+
+. rename (ID iwy treat rgoingl) (person_id year treated outcome)
+
+. rename (GreenCoverageRateBD RoadSurAreaPerCap act_12) (m_green m_road m_social)
+
+. rename 工业二氧化硫排放量吨 m_so2
+
+. rename (hosper pm) (m_medical m_pm25)
+
+. replace city=strtrim(city)
+(0 real changes made)
+
+. drop if missing(person_id) | missing(city) | missing(year)
+(1,310 observations deleted)
+
+. drop if missing(wave)
+(0 observations deleted)
+
+. keep if age>=45 & age<. & rural==0
+(51,158 observations deleted)
+
+. capture drop did
+
+. generate double did=treated*(year>=2017)
+
+. egen long city_id=group(city)
+
+. egen long respondent_id=group(person_id)
+
+. local controls gender marry log_real_inc_per rwork rural2 edu hchild retire adlab_c smoken drinkl srh age
+
+. assert inlist(treated,0,1)
+
+. bysort city_id: assert treated==treated[1]
+
+. bysort respondent_id: assert city_id==city_id[1]
+
+. 
+. reghdfe outcome did `controls', absorb(city_id year) vce(cluster respondent_id)
+(MWFE estimator converged in 5 iterations)
+
+HDFE Linear regression                            Number of obs   =     16,661
+Absorbing 2 HDFE groups                           F(  14,   7994) =      63.89
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.1318
+                                                  Adj R-squared   =     0.1260
+                                                  Within R-sq.    =     0.0968
+Number of clusters (respondent_id) =      7,995   Root MSE        =     0.6976
+
+                          (Std. err. adjusted for 7,995 clusters in respondent_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+         outcome | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+             did |  -.0866795   .0278562    -3.11   0.002    -.1412849    -.032074
+          gender |  -.0461119   .0152335    -3.03   0.002    -.0759735   -.0162503
+           marry |  -.1147333   .0206277    -5.56   0.000    -.1551689   -.0742976
+log_real_inc_per |  -.0472414   .0057085    -8.28   0.000    -.0584316   -.0360511
+           rwork |    .023662   .0148073     1.60   0.110    -.0053643    .0526882
+          rural2 |   .0183742   .0186856     0.98   0.325    -.0182545    .0550028
+             edu |  -.0426202   .0065973    -6.46   0.000    -.0555526   -.0296877
+          hchild |  -.0042275   .0066622    -0.63   0.526    -.0172872    .0088322
+          retire |  -.0365471   .0160857    -2.27   0.023    -.0680792    -.005015
+         adlab_c |   .1512895    .011147    13.57   0.000     .1294384    .1731405
+          smoken |   .0268727    .016038     1.68   0.094    -.0045659    .0583114
+          drinkl |  -.0197999   .0132326    -1.50   0.135    -.0457392    .0061395
+             srh |  -.1132398   .0070289   -16.11   0.000    -.1270183   -.0994613
+             age |  -.0016141   .0009347    -1.73   0.084    -.0034463    .0002182
+           _cons |   2.359321   .0909491    25.94   0.000     2.181037    2.537604
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     city_id |        94           0          94     |
+        year |         5           1           4     |
+-----------------------------------------------------+
+
+. generate byte baseline=e(sample)
+
+. assert e(N)==16661
+
+. assert reldif(_b[did],-.0866794779116242)<1e-8
+
+. tempfile eligible summary
+
+. save `eligible'
+file /var/folders/b2/mrhxck5j5898_27nb6sn5h5w0000gn/T//St50453.000001 saved as .dta format
+
+. tempname result
+
+. postfile `result' str12 Candidate str1 Path long(N Respondents Cities TreatedCities) ///
+>     double(Estimate City_SE City_df City_p City_CI_L City_CI_U ///
+>     WCB_p WCB_CI_L WCB_CI_U Reps Reps_feasible Null_imposed ///
+>     Estimate_difference SE_difference) int CI_pieces str200 WCB_CI_text using `summary'
+
+. 
+. capture program drop fit_wild
+
+. program define fit_wild
+  1.     syntax, DEP(varname) RHS(string) TARGET(name) CANDIDATE(string) PATH(string) ///
+>         HANDLE(name) REPS(integer)
+  2.     tempvar sample tag tagperson
+  3.     tempname estimate se df n p lo hi ci wp feasible imposed diff sediff dist
+  4.     reghdfe `dep' `rhs', absorb(city_id year) vce(cluster city_id)
+  5.     generate byte `sample'=e(sample)
+  6.     scalar `estimate'=_b[`target']
+  7.     scalar `se'=_se[`target']
+  8.     scalar `df'=e(df_r)
+  9.     scalar `n'=e(N)
+ 10.     scalar `p'=2*ttail(`df',abs(`estimate'/`se'))
+ 11.     scalar `lo'=`estimate'-invttail(`df',.025)*`se'
+ 12.     scalar `hi'=`estimate'+invttail(`df',.025)*`se'
+ 13.     egen byte `tag'=tag(city_id) if `sample'
+ 14.     quietly count if `tag'==1
+ 15.     local cities=r(N)
+ 16.     quietly count if `tag'==1 & treated==1
+ 17.     local treatedcities=r(N)
+ 18.     egen byte `tagperson'=tag(respondent_id) if `sample'
+ 19.     quietly count if `tagperson'==1
+ 20.     local persons=r(N)
+ 21.     assert `cities'==94
+ 22.     assert `treatedcities'==10
+ 23. 
+.     * The same city + year FE model, with year indicators written explicitly:
+.     * boottest supports one absorbed FE set. Compare sample, coefficient and SE.
+.     reghdfe `dep' `rhs' i.year if `sample', absorb(city_id) vce(cluster city_id)
+ 24.     assert e(sample)==`sample'
+ 25.     assert e(N)==`n'
+ 26.     assert e(df_r)==`df'
+ 27.     assert reldif(_b[`target'],`estimate')<1e-8
+ 28.     assert reldif(_se[`target'],`se')<1e-8
+ 29.     scalar `diff'=_b[`target']-`estimate'
+ 30.     scalar `sediff'=_se[`target']-`se'
+ 31.     display "CHECK: `candidate', path `path', same sample, city + year FE and coefficients verified."
+ 32.     boottest `target', cluster(city_id) bootcluster(city_id) reps(`reps') ///
+>         seed(2025) weight(rademacher) boottype(wild) statistic(t) ///
+>         ptype(symmetric) level(95) nograph format(%14.9g) ptolerance(.0001) svmat
+ 33.     return list
+ 34.     scalar `wp'=r(p)
+ 35.     matrix `dist'=r(dist)
+ 36.     mata: st_numscalar("`feasible'",sum(st_matrix("`dist'"):<.))
+ 37.     scalar `imposed'=r(null)
+ 38.     matrix `ci'=r(CI)
+ 39.     local cis `"`r(CIstr)'"'
+ 40.     local pieces=rowsof(`ci')
+ 41.     assert r(reps)==`reps'
+ 42.     assert `feasible'==`reps'
+ 43.     assert `imposed'==1
+ 44.     matrix list `ci', format(%20.12g)
+ 45.     post `handle' ("`candidate'") ("`path'") (`n') (`persons') (`cities') (`treatedcities') ///
+>         (`estimate') (`se') (`df') (`p') (`lo') (`hi') ///
+>         (`wp') (`ci'[1,1]) (`ci'[1,2]) (`reps') (`feasible') (`imposed') ///
+>         (`diff') (`sediff') (`pieces') (`"`cis'"')
+ 46.     display "COMPLETED: `candidate', path `path'; WCB p = " %12.8f `wp'
+ 47. end
+
+. 
+. keep if baseline
+(17,567 observations deleted)
+
+. fit_wild, dep(outcome) rhs("did `controls'") target(did) candidate(Overall) ///
+>     path(c) handle(`result') reps(`repetitions')
+(MWFE estimator converged in 5 iterations)
+
+HDFE Linear regression                            Number of obs   =     16,661
+Absorbing 2 HDFE groups                           F(  14,     93) =      46.95
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.1318
+                                                  Adj R-squared   =     0.1260
+                                                  Within R-sq.    =     0.0968
+Number of clusters (city_id) =         94         Root MSE        =     0.6976
+
+                                   (Std. err. adjusted for 94 clusters in city_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+         outcome | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+             did |  -.0866795   .0330454    -2.62   0.010     -.152301   -.0210579
+          gender |  -.0461119   .0154226    -2.99   0.004    -.0767382   -.0154856
+           marry |  -.1147333   .0214939    -5.34   0.000     -.157416   -.0720506
+log_real_inc_per |  -.0472414   .0062431    -7.57   0.000    -.0596389   -.0348438
+           rwork |    .023662   .0151108     1.57   0.121    -.0063452    .0536691
+          rural2 |   .0183742   .0219053     0.84   0.404    -.0251253    .0618737
+             edu |  -.0426202   .0071873    -5.93   0.000    -.0568926   -.0283477
+          hchild |  -.0042275   .0069418    -0.61   0.544    -.0180126    .0095576
+          retire |  -.0365471   .0145484    -2.51   0.014    -.0654373   -.0076569
+         adlab_c |   .1512895   .0117215    12.91   0.000     .1280129     .174566
+          smoken |   .0268727   .0139611     1.92   0.057    -.0008512    .0545967
+          drinkl |  -.0197999   .0137448    -1.44   0.153    -.0470942    .0074945
+             srh |  -.1132398   .0078005   -14.52   0.000    -.1287301   -.0977495
+             age |  -.0016141   .0008721    -1.85   0.067    -.0033458    .0001176
+           _cons |   2.359321   .0985391    23.94   0.000     2.163641       2.555
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     city_id |        94          94           0    *|
+        year |         5           1           4     |
+-----------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(MWFE estimator converged in 1 iterations)
+
+HDFE Linear regression                            Number of obs   =     16,661
+Absorbing 1 HDFE group                            F(  18,     93) =      41.31
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.1318
+                                                  Adj R-squared   =     0.1260
+                                                  Within R-sq.    =     0.0987
+Number of clusters (city_id) =         94         Root MSE        =     0.6976
+
+                                   (Std. err. adjusted for 94 clusters in city_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+         outcome | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+             did |  -.0866795   .0330454    -2.62   0.010     -.152301   -.0210579
+          gender |  -.0461119   .0154226    -2.99   0.004    -.0767382   -.0154856
+           marry |  -.1147333   .0214939    -5.34   0.000     -.157416   -.0720506
+log_real_inc_per |  -.0472414   .0062431    -7.57   0.000    -.0596389   -.0348438
+           rwork |    .023662   .0151108     1.57   0.121    -.0063452    .0536691
+          rural2 |   .0183742   .0219053     0.84   0.404    -.0251253    .0618737
+             edu |  -.0426202   .0071873    -5.93   0.000    -.0568926   -.0283477
+          hchild |  -.0042275   .0069418    -0.61   0.544    -.0180126    .0095576
+          retire |  -.0365471   .0145484    -2.51   0.014    -.0654373   -.0076569
+         adlab_c |   .1512895   .0117215    12.91   0.000     .1280129     .174566
+          smoken |   .0268727   .0139611     1.92   0.057    -.0008512    .0545967
+          drinkl |  -.0197999   .0137448    -1.44   0.153    -.0470942    .0074945
+             srh |  -.1132398   .0078005   -14.52   0.000    -.1287301   -.0977495
+             age |  -.0016141   .0008721    -1.85   0.067    -.0033458    .0001176
+                 |
+            year |
+           2013  |  -.0735059   .0216237    -3.40   0.001    -.1164463   -.0305655
+           2015  |  -.0326591    .027527    -1.19   0.238    -.0873224    .0220041
+           2018  |   .0919451   .0244929     3.75   0.000     .0433071     .140583
+           2020  |   .0782749   .0232868     3.36   0.001     .0320318    .1245179
+                 |
+           _cons |   2.324203   .0928328    25.04   0.000     2.139855     2.50855
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     city_id |        94          94           0    *|
+-----------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+CHECK: Overall, path c, same sample, city + year FE and coefficients verified.
+
+Overriding estimator's cluster/robust settings with cluster(city_id)
+
+Wild bootstrap-t, null imposed, 9999 replications, Wald test, clustering by city_id, bootstrap clustering by city_id, Rademacher weights:
+  did
+
+                           t(93) =    -2.6230
+                        Prob>|t| =     0.0200
+
+95% confidence set for null hypothesis expression: [−.166171915, −.0142712661]
+
+scalars:
+               r(NH0s) =  1
+               r(reps) =  9999
+               r(null) =  1
+               r(ptol) =  .0001
+              r(level) =  95
+                  r(p) =  .02000200020002
+                 r(df) =  1
+               r(df_r) =  93
+                  r(F) =  6.880365514110596
+                  r(t) =  -2.62304508426954
+
+macros:
+          r(clustvars) : "city_id"
+           r(boottype) : "wild"
+         r(weighttype) : "rademacher"
+          r(statistic) : "t"
+             r(robust) : "robust"
+              r(CIstr) : "[−.166171915, −.0142712661]"
+               r(seed) : "2025"
+
+matrices:
+               r(dist) :  9999 x 1
+                 r(CI) :  1 x 2
+               r(plot) :  25 x 2
+                  r(V) :  1 x 1
+                  r(b) :  1 x 1
+
+__00000B[1,2]
+                 lo              hi
+did  -.166171915382  -.014271266106
+COMPLETED: Overall, path c; WCB p =   0.02000200
+
+. 
+. local labels Green Road SO2 Medical PM25 Social
+
+. local mediators m_green m_road m_so2 m_medical m_pm25 m_social
+
+. local expected_n 16661 16661 15430 11141 16661 16660
+
+. forvalues j=1/6 {
+  2.     use `eligible', clear
+  3.     local med : word `j' of `mediators'
+  4.     local label : word `j' of `labels'
+  5.     local n_expected : word `j' of `expected_n'
+  6.     quietly reghdfe outcome `med' did `controls' if baseline, ///
+>         absorb(city_id year) vce(cluster respondent_id)
+  7.     generate byte common=e(sample)
+  8.     keep if common
+  9.     assert _N==`n_expected'
+ 10.     fit_wild, dep(`med') rhs("did `controls'") target(did) candidate(`label') ///
+>         path(a) handle(`result') reps(`repetitions')
+ 11.     fit_wild, dep(outcome) rhs("`med' did `controls'") target(`med') candidate(`label') ///
+>         path(b) handle(`result') reps(`repetitions')
+ 12. }
+(Harmonized CHARLS Ver.D)
+(17,567 observations deleted)
+(MWFE estimator converged in 5 iterations)
+
+HDFE Linear regression                            Number of obs   =     16,661
+Absorbing 2 HDFE groups                           F(  14,     93) =       0.87
+Statistics robust to heteroskedasticity           Prob > F        =     0.5977
+                                                  R-squared       =     0.7975
+                                                  Adj R-squared   =     0.7961
+                                                  Within R-sq.    =     0.0016
+Number of clusters (city_id) =         94         Root MSE        =     2.0949
+
+                                   (Std. err. adjusted for 94 clusters in city_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+         m_green | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+             did |   .3784377   .5982113     0.63   0.529    -.8094915    1.566367
+          gender |  -.0084177   .0423203    -0.20   0.843    -.0924573     .075622
+           marry |   .0301996   .0538001     0.56   0.576    -.0766369     .137036
+log_real_inc_per |  -.0223625   .0299256    -0.75   0.457    -.0817887    .0370637
+           rwork |  -.0424199   .0479991    -0.88   0.379    -.1377366    .0528968
+          rural2 |  -.1503868   .0873544    -1.72   0.088    -.3238554    .0230818
+             edu |   .0129014   .0166992     0.77   0.442    -.0202599    .0460626
+          hchild |   .0096162    .021022     0.46   0.648    -.0321293    .0513617
+          retire |  -.0817792   .0591914    -1.38   0.170    -.1993216    .0357633
+         adlab_c |  -.0055139   .0218703    -0.25   0.802     -.048944    .0379162
+          smoken |   .0077981   .0501052     0.16   0.877    -.0917008     .107297
+          drinkl |  -.0122643   .0453739    -0.27   0.788    -.1023678    .0778392
+             srh |   .0061752   .0195507     0.32   0.753    -.0326486     .044999
+             age |  -.0008676   .0031712    -0.27   0.785     -.007165    .0054297
+           _cons |   40.97282   .2961166   138.37   0.000     40.38479    41.56085
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     city_id |        94          94           0    *|
+        year |         5           1           4     |
+-----------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(MWFE estimator converged in 1 iterations)
+
+HDFE Linear regression                            Number of obs   =     16,661
+Absorbing 1 HDFE group                            F(  18,     93) =       4.36
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.7975
+                                                  Adj R-squared   =     0.7961
+                                                  Within R-sq.    =     0.1955
+Number of clusters (city_id) =         94         Root MSE        =     2.0949
+
+                                   (Std. err. adjusted for 94 clusters in city_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+         m_green | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+             did |   .3784377   .5982113     0.63   0.529    -.8094915    1.566367
+          gender |  -.0084177   .0423203    -0.20   0.843    -.0924573     .075622
+           marry |   .0301996   .0538001     0.56   0.576    -.0766369     .137036
+log_real_inc_per |  -.0223625   .0299256    -0.75   0.457    -.0817887    .0370637
+           rwork |  -.0424199   .0479991    -0.88   0.379    -.1377366    .0528968
+          rural2 |  -.1503868   .0873544    -1.72   0.088    -.3238554    .0230818
+             edu |   .0129014   .0166992     0.77   0.442    -.0202599    .0460626
+          hchild |   .0096162    .021022     0.46   0.648    -.0321293    .0513617
+          retire |  -.0817792   .0591914    -1.38   0.170    -.1993216    .0357633
+         adlab_c |  -.0055139   .0218703    -0.25   0.802     -.048944    .0379162
+          smoken |   .0077981   .0501052     0.16   0.877    -.0917008     .107297
+          drinkl |  -.0122643   .0453739    -0.27   0.788    -.1023678    .0778392
+             srh |   .0061752   .0195507     0.32   0.753    -.0326486     .044999
+             age |  -.0008676   .0031712    -0.27   0.785     -.007165    .0054297
+                 |
+            year |
+           2013  |   .0848928   .3611516     0.24   0.815    -.6322826    .8020683
+           2015  |   .8896309   .4559245     1.95   0.054    -.0157447    1.795007
+           2018  |    1.81456   .5496569     3.30   0.001       .72305     2.90607
+           2020  |   2.531645   .5415828     4.67   0.000     1.456169    3.607121
+                 |
+           _cons |   39.56256   .5207225    75.98   0.000     38.52851    40.59661
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     city_id |        94          94           0    *|
+-----------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+CHECK: Green, path a, same sample, city + year FE and coefficients verified.
+
+Overriding estimator's cluster/robust settings with cluster(city_id)
+
+Wild bootstrap-t, null imposed, 9999 replications, Wald test, clustering by city_id, bootstrap clustering by city_id, Rademacher weights:
+  did
+
+                           t(93) =     0.6326
+                        Prob>|t| =     0.5528
+
+95% confidence set for null hypothesis expression: [−1.33470599, 1.59585865]
+
+scalars:
+               r(NH0s) =  1
+               r(reps) =  9999
+               r(null) =  1
+               r(ptol) =  .0001
+              r(level) =  95
+                  r(p) =  .5527552755275528
+                 r(df) =  1
+               r(df_r) =  93
+                  r(F) =  .4002021883046172
+                  r(t) =  .6326153557293857
+
+macros:
+          r(clustvars) : "city_id"
+           r(boottype) : "wild"
+         r(weighttype) : "rademacher"
+          r(statistic) : "t"
+             r(robust) : "robust"
+              r(CIstr) : "[−1.33470599, 1.59585865]"
+               r(seed) : "2025"
+
+matrices:
+               r(dist) :  9999 x 1
+                 r(CI) :  1 x 2
+               r(plot) :  25 x 2
+                  r(V) :  1 x 1
+                  r(b) :  1 x 1
+
+__00000B[1,2]
+                 lo              hi
+did  -1.33470599209   1.59585865479
+COMPLETED: Green, path a; WCB p =   0.55275528
+(MWFE estimator converged in 5 iterations)
+
+HDFE Linear regression                            Number of obs   =     16,661
+Absorbing 2 HDFE groups                           F(  15,     93) =      45.61
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.1322
+                                                  Adj R-squared   =     0.1264
+                                                  Within R-sq.    =     0.0972
+Number of clusters (city_id) =         94         Root MSE        =     0.6975
+
+                                   (Std. err. adjusted for 94 clusters in city_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+         outcome | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+         m_green |  -.0074059    .003488    -2.12   0.036    -.0143324   -.0004794
+             did |  -.0838768   .0322425    -2.60   0.011     -.147904   -.0198496
+          gender |  -.0461742   .0154234    -2.99   0.004    -.0768021   -.0155463
+           marry |  -.1145096   .0214829    -5.33   0.000    -.1571703   -.0718489
+log_real_inc_per |   -.047407   .0061941    -7.65   0.000    -.0597073   -.0351067
+           rwork |   .0233478   .0150967     1.55   0.125    -.0066312    .0533269
+          rural2 |   .0172604   .0218275     0.79   0.431    -.0260846    .0606055
+             edu |  -.0425246   .0071994    -5.91   0.000    -.0568213   -.0282279
+          hchild |  -.0041563   .0069489    -0.60   0.551    -.0179555     .009643
+          retire |  -.0371527   .0146481    -2.54   0.013     -.066241   -.0080644
+         adlab_c |   .1512486   .0117062    12.92   0.000     .1280024    .1744949
+          smoken |   .0269305   .0139093     1.94   0.056    -.0006907    .0545517
+          drinkl |  -.0198907   .0137603    -1.45   0.152    -.0472159    .0074345
+             srh |   -.113194   .0077361   -14.63   0.000    -.1285564   -.0978317
+             age |  -.0016205    .000868    -1.87   0.065    -.0033441    .0001031
+           _cons |   2.662762   .1676337    15.88   0.000     2.329874    2.995649
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     city_id |        94          94           0    *|
+        year |         5           1           4     |
+-----------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(MWFE estimator converged in 1 iterations)
+
+HDFE Linear regression                            Number of obs   =     16,661
+Absorbing 1 HDFE group                            F(  19,     93) =      41.42
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.1322
+                                                  Adj R-squared   =     0.1264
+                                                  Within R-sq.    =     0.0992
+Number of clusters (city_id) =         94         Root MSE        =     0.6975
+
+                                   (Std. err. adjusted for 94 clusters in city_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+         outcome | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+         m_green |  -.0074059    .003488    -2.12   0.036    -.0143324   -.0004794
+             did |  -.0838768   .0322425    -2.60   0.011     -.147904   -.0198496
+          gender |  -.0461742   .0154234    -2.99   0.004    -.0768021   -.0155463
+           marry |  -.1145096   .0214829    -5.33   0.000    -.1571703   -.0718489
+log_real_inc_per |   -.047407   .0061941    -7.65   0.000    -.0597073   -.0351067
+           rwork |   .0233478   .0150967     1.55   0.125    -.0066312    .0533269
+          rural2 |   .0172604   .0218275     0.79   0.431    -.0260846    .0606055
+             edu |  -.0425246   .0071994    -5.91   0.000    -.0568213   -.0282279
+          hchild |  -.0041563   .0069489    -0.60   0.551    -.0179555     .009643
+          retire |  -.0371527   .0146481    -2.54   0.013     -.066241   -.0080644
+         adlab_c |   .1512486   .0117062    12.92   0.000     .1280024    .1744949
+          smoken |   .0269305   .0139093     1.94   0.056    -.0006907    .0545517
+          drinkl |  -.0198907   .0137603    -1.45   0.152    -.0472159    .0074345
+             srh |   -.113194   .0077361   -14.63   0.000    -.1285564   -.0978317
+             age |  -.0016205    .000868    -1.87   0.065    -.0033441    .0001031
+                 |
+            year |
+           2013  |  -.0728772   .0220671    -3.30   0.001     -.116698   -.0290564
+           2015  |  -.0260706   .0267822    -0.97   0.333    -.0792547    .0271135
+           2018  |   .1053835   .0241977     4.36   0.000     .0573317    .1534354
+           2020  |    .097024   .0232696     4.17   0.000     .0508152    .1432328
+                 |
+           _cons |     2.6172   .1629869    16.06   0.000      2.29354    2.940859
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     city_id |        94          94           0    *|
+-----------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+CHECK: Green, path b, same sample, city + year FE and coefficients verified.
+
+Overriding estimator's cluster/robust settings with cluster(city_id)
+
+Wild bootstrap-t, null imposed, 9999 replications, Wald test, clustering by city_id, bootstrap clustering by city_id, Rademacher weights:
+  m_green
+
+                           t(93) =    -2.1232
+                        Prob>|t| =     0.0704
+
+95% confidence set for null hypothesis expression: [−.0148812569, .000777399908]
+
+scalars:
+               r(NH0s) =  1
+               r(reps) =  9999
+               r(null) =  1
+               r(ptol) =  .0001
+              r(level) =  95
+                  r(p) =  .0704070407040704
+                 r(df) =  1
+               r(df_r) =  93
+                  r(F) =  4.508168280431127
+                  r(t) =  -2.12324475283259
+
+macros:
+          r(clustvars) : "city_id"
+           r(boottype) : "wild"
+         r(weighttype) : "rademacher"
+          r(statistic) : "t"
+             r(robust) : "robust"
+              r(CIstr) : "[−.0148812569, .000777399908]"
+               r(seed) : "2025"
+
+matrices:
+               r(dist) :  9999 x 1
+                 r(CI) :  1 x 2
+               r(plot) :  25 x 2
+                  r(V) :  1 x 1
+                  r(b) :  1 x 1
+
+__00000B[1,2]
+                       lo                hi
+m_green   -.0148812568832  .000777399907716
+COMPLETED: Green, path b; WCB p =   0.07040704
+(Harmonized CHARLS Ver.D)
+(17,567 observations deleted)
+(MWFE estimator converged in 5 iterations)
+
+HDFE Linear regression                            Number of obs   =     16,661
+Absorbing 2 HDFE groups                           F(  14,     93) =       3.75
+Statistics robust to heteroskedasticity           Prob > F        =     0.0001
+                                                  R-squared       =     0.8689
+                                                  Adj R-squared   =     0.8680
+                                                  Within R-sq.    =     0.0239
+Number of clusters (city_id) =         94         Root MSE        =     2.5254
+
+                                   (Std. err. adjusted for 94 clusters in city_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+          m_road | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+             did |  -2.305227   1.023349    -2.25   0.027    -4.337395   -.2730586
+          gender |   .0252631   .0435325     0.58   0.563    -.0611837    .1117099
+           marry |   .0943513    .074338     1.27   0.208    -.0532691    .2419718
+log_real_inc_per |  -.0638587    .038863    -1.64   0.104    -.1410328    .0133155
+           rwork |  -.0486869   .0796254    -0.61   0.542    -.2068071    .1094333
+          rural2 |  -.1578824   .1051064    -1.50   0.136     -.366603    .0508381
+             edu |   .0335716   .0195441     1.72   0.089     -.005239    .0723823
+          hchild |   .0062671   .0342231     0.18   0.855    -.0616931    .0742273
+          retire |  -.1322076   .0686566    -1.93   0.057     -.268546    .0041308
+         adlab_c |  -.0348448   .0416522    -0.84   0.405    -.1175578    .0478683
+          smoken |   .0242839   .0407114     0.60   0.552    -.0565609    .1051287
+          drinkl |  -.1491905   .0508413    -2.93   0.004    -.2501512   -.0482297
+             srh |   .0619091   .0291211     2.13   0.036     .0040804    .1197377
+             age |    .001025   .0035568     0.29   0.774     -.006038     .008088
+           _cons |   18.15553   .3386595    53.61   0.000     17.48302    18.82805
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     city_id |        94          94           0    *|
+        year |         5           1           4     |
+-----------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(MWFE estimator converged in 1 iterations)
+
+HDFE Linear regression                            Number of obs   =     16,661
+Absorbing 1 HDFE group                            F(  18,     93) =      10.30
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.8689
+                                                  Adj R-squared   =     0.8680
+                                                  Within R-sq.    =     0.3144
+Number of clusters (city_id) =         94         Root MSE        =     2.5254
+
+                                   (Std. err. adjusted for 94 clusters in city_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+          m_road | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+             did |  -2.305227   1.023349    -2.25   0.027    -4.337395   -.2730586
+          gender |   .0252631   .0435325     0.58   0.563    -.0611837    .1117099
+           marry |   .0943513    .074338     1.27   0.208    -.0532691    .2419718
+log_real_inc_per |  -.0638587    .038863    -1.64   0.104    -.1410328    .0133155
+           rwork |  -.0486869   .0796254    -0.61   0.542    -.2068071    .1094333
+          rural2 |  -.1578824   .1051064    -1.50   0.136     -.366603    .0508381
+             edu |   .0335716   .0195441     1.72   0.089     -.005239    .0723823
+          hchild |   .0062671   .0342231     0.18   0.855    -.0616931    .0742273
+          retire |  -.1322076   .0686566    -1.93   0.057     -.268546    .0041308
+         adlab_c |  -.0348448   .0416522    -0.84   0.405    -.1175578    .0478683
+          smoken |   .0242839   .0407114     0.60   0.552    -.0565609    .1051287
+          drinkl |  -.1491905   .0508413    -2.93   0.004    -.2501512   -.0482297
+             srh |   .0619091   .0291211     2.13   0.036     .0040804    .1197377
+             age |    .001025   .0035568     0.29   0.774     -.006038     .008088
+                 |
+            year |
+           2013  |    1.61343   .5209104     3.10   0.003     .5790053    2.647855
+           2015  |   2.315905   .5150603     4.50   0.000     1.293097    3.338713
+           2018  |   3.593942   .5379832     6.68   0.000     2.525614     4.66227
+           2020  |   5.074728   .5667163     8.95   0.000     3.949342    6.200115
+                 |
+           _cons |   15.08211   .4387043    34.38   0.000     14.21093    15.95329
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     city_id |        94          94           0    *|
+-----------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+CHECK: Road, path a, same sample, city + year FE and coefficients verified.
+
+Overriding estimator's cluster/robust settings with cluster(city_id)
+
+Wild bootstrap-t, null imposed, 9999 replications, Wald test, clustering by city_id, bootstrap clustering by city_id, Rademacher weights:
+  did
+
+                           t(93) =    -2.2526
+                        Prob>|t| =     0.0622
+
+95% confidence set for null hypothesis expression: [−5.21589474, .156325899]
+
+scalars:
+               r(NH0s) =  1
+               r(reps) =  9999
+               r(null) =  1
+               r(ptol) =  .0001
+              r(level) =  95
+                  r(p) =  .0622062206220622
+                 r(df) =  1
+               r(df_r) =  93
+                  r(F) =  5.074343116727456
+                  r(t) =  -2.252630266317013
+
+macros:
+          r(clustvars) : "city_id"
+           r(boottype) : "wild"
+         r(weighttype) : "rademacher"
+          r(statistic) : "t"
+             r(robust) : "robust"
+              r(CIstr) : "[−5.21589474, .156325899]"
+               r(seed) : "2025"
+
+matrices:
+               r(dist) :  9999 x 1
+                 r(CI) :  1 x 2
+               r(plot) :  25 x 2
+                  r(V) :  1 x 1
+                  r(b) :  1 x 1
+
+__00000B[1,2]
+                 lo              hi
+did  -5.21589473961   .156325899302
+COMPLETED: Road, path a; WCB p =   0.06220622
+(MWFE estimator converged in 5 iterations)
+
+HDFE Linear regression                            Number of obs   =     16,661
+Absorbing 2 HDFE groups                           F(  15,     93) =      44.84
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.1318
+                                                  Adj R-squared   =     0.1259
+                                                  Within R-sq.    =     0.0968
+Number of clusters (city_id) =         94         Root MSE        =     0.6977
+
+                                   (Std. err. adjusted for 94 clusters in city_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+         outcome | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+          m_road |  -.0002141    .002661    -0.08   0.936    -.0054984    .0050701
+             did |  -.0871731   .0338693    -2.57   0.012    -.1544309   -.0199154
+          gender |  -.0461064   .0154273    -2.99   0.004     -.076742   -.0154709
+           marry |  -.1147131   .0214735    -5.34   0.000    -.1573552    -.072071
+log_real_inc_per |   -.047255   .0062516    -7.56   0.000    -.0596695   -.0348406
+           rwork |   .0236516   .0151291     1.56   0.121    -.0063918    .0536949
+          rural2 |   .0183404   .0219263     0.84   0.405     -.025201    .0618817
+             edu |   -.042613    .007191    -5.93   0.000    -.0568929   -.0283331
+          hchild |  -.0042262   .0069461    -0.61   0.544    -.0180197    .0095674
+          retire |  -.0365754   .0145422    -2.52   0.014    -.0654534   -.0076974
+         adlab_c |    .151282    .011729    12.90   0.000     .1279906    .1745734
+          smoken |   .0268779   .0139595     1.93   0.057    -.0008429    .0545987
+          drinkl |  -.0198318   .0136524    -1.45   0.150    -.0469428    .0072792
+             srh |  -.1132265   .0078272   -14.47   0.000    -.1287697   -.0976833
+             age |  -.0016139   .0008717    -1.85   0.067    -.0033449    .0001172
+           _cons |   2.363209   .1115784    21.18   0.000     2.141636    2.584781
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     city_id |        94          94           0    *|
+        year |         5           1           4     |
+-----------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(MWFE estimator converged in 1 iterations)
+
+HDFE Linear regression                            Number of obs   =     16,661
+Absorbing 1 HDFE group                            F(  19,     93) =      41.06
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.1318
+                                                  Adj R-squared   =     0.1259
+                                                  Within R-sq.    =     0.0987
+Number of clusters (city_id) =         94         Root MSE        =     0.6977
+
+                                   (Std. err. adjusted for 94 clusters in city_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+         outcome | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+          m_road |  -.0002141    .002661    -0.08   0.936    -.0054984    .0050701
+             did |  -.0871731   .0338693    -2.57   0.012    -.1544309   -.0199154
+          gender |  -.0461064   .0154273    -2.99   0.004     -.076742   -.0154709
+           marry |  -.1147131   .0214735    -5.34   0.000    -.1573552    -.072071
+log_real_inc_per |   -.047255   .0062516    -7.56   0.000    -.0596695   -.0348406
+           rwork |   .0236516   .0151291     1.56   0.121    -.0063918    .0536949
+          rural2 |   .0183404   .0219263     0.84   0.405     -.025201    .0618817
+             edu |   -.042613    .007191    -5.93   0.000    -.0568929   -.0283331
+          hchild |  -.0042262   .0069461    -0.61   0.544    -.0180197    .0095674
+          retire |  -.0365754   .0145422    -2.52   0.014    -.0654534   -.0076974
+         adlab_c |    .151282    .011729    12.90   0.000     .1279906    .1745734
+          smoken |   .0268779   .0139595     1.93   0.057    -.0008429    .0545987
+          drinkl |  -.0198318   .0136524    -1.45   0.150    -.0469428    .0072792
+             srh |  -.1132265   .0078272   -14.47   0.000    -.1287697   -.0976833
+             age |  -.0016139   .0008717    -1.85   0.067    -.0033449    .0001172
+                 |
+            year |
+           2013  |  -.0731604    .022756    -3.21   0.002    -.1183493   -.0279715
+           2015  |  -.0321632   .0294995    -1.09   0.278    -.0907433    .0264169
+           2018  |   .0927147   .0269778     3.44   0.001     .0391421    .1462872
+           2020  |   .0793616   .0273778     2.90   0.005     .0249947    .1337285
+                 |
+           _cons |   2.327433    .101994    22.82   0.000     2.124893    2.529973
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     city_id |        94          94           0    *|
+-----------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+CHECK: Road, path b, same sample, city + year FE and coefficients verified.
+
+Overriding estimator's cluster/robust settings with cluster(city_id)
+
+Wild bootstrap-t, null imposed, 9999 replications, Wald test, clustering by city_id, bootstrap clustering by city_id, Rademacher weights:
+  m_road
+
+                           t(93) =    -0.0805
+                        Prob>|t| =     0.9406
+
+95% confidence set for null hypothesis expression: [−.00554792519, .00529918223]
+
+scalars:
+               r(NH0s) =  1
+               r(reps) =  9999
+               r(null) =  1
+               r(ptol) =  .0001
+              r(level) =  95
+                  r(p) =  .9405940594059405
+                 r(df) =  1
+               r(df_r) =  93
+                  r(F) =  .0064760906542337
+                  r(t) =  -.0804741614074584
+
+macros:
+          r(clustvars) : "city_id"
+           r(boottype) : "wild"
+         r(weighttype) : "rademacher"
+          r(statistic) : "t"
+             r(robust) : "robust"
+              r(CIstr) : "[−.00554792519, .00529918223]"
+               r(seed) : "2025"
+
+matrices:
+               r(dist) :  9999 x 1
+                 r(CI) :  1 x 2
+               r(plot) :  25 x 2
+                  r(V) :  1 x 1
+                  r(b) :  1 x 1
+
+__00000B[1,2]
+                      lo                hi
+m_road  -.00554792518984    .0052991822335
+COMPLETED: Road, path b; WCB p =   0.94059406
+(Harmonized CHARLS Ver.D)
+(18,798 observations deleted)
+(MWFE estimator converged in 5 iterations)
+
+HDFE Linear regression                            Number of obs   =     15,430
+Absorbing 2 HDFE groups                           F(  14,     93) =       1.54
+Statistics robust to heteroskedasticity           Prob > F        =     0.1131
+                                                  R-squared       =     0.6842
+                                                  Adj R-squared   =     0.6819
+                                                  Within R-sq.    =     0.0034
+Number of clusters (city_id) =         94         Root MSE        = 31658.5495
+
+                                   (Std. err. adjusted for 94 clusters in city_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+           m_so2 | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+             did |  -8292.462   15205.19    -0.55   0.587    -38486.97    21902.04
+          gender |   658.3466    417.642     1.58   0.118    -171.0076    1487.701
+           marry |   653.6716   856.9382     0.76   0.448    -1048.038    2355.381
+log_real_inc_per |   589.1749   381.3444     1.54   0.126    -168.0994    1346.449
+           rwork |  -820.5778   960.7945    -0.85   0.395    -2728.525     1087.37
+          rural2 |   1462.914   3357.354     0.44   0.664    -5204.125    8129.953
+             edu |   -345.771   243.0109    -1.42   0.158    -828.3425    136.8006
+          hchild |  -323.7342   371.2996    -0.87   0.386    -1061.062    413.5932
+          retire |  -874.8989   2255.974    -0.39   0.699    -5354.816    3605.018
+         adlab_c |  -312.6929   300.1141    -1.04   0.300      -908.66    283.2741
+          smoken |   877.6493   662.6776     1.32   0.189    -438.2971    2193.596
+          drinkl |  -1719.827   867.6945    -1.98   0.050    -3442.897    3.241919
+             srh |  -144.0931   424.0883    -0.34   0.735    -986.2484    698.0623
+             age |   7.801167    33.6669     0.23   0.817    -59.05462    74.65695
+           _cons |   33653.39   6185.909     5.44   0.000     21369.41    45937.38
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     city_id |        94          94           0    *|
+        year |         5           1           4     |
+-----------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(MWFE estimator converged in 1 iterations)
+
+HDFE Linear regression                            Number of obs   =     15,430
+Absorbing 1 HDFE group                            F(  18,     93) =      11.21
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.6842
+                                                  Adj R-squared   =     0.6819
+                                                  Within R-sq.    =     0.4686
+Number of clusters (city_id) =         94         Root MSE        = 31658.5495
+
+                                   (Std. err. adjusted for 94 clusters in city_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+           m_so2 | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+             did |  -8292.462   15205.19    -0.55   0.587    -38486.97    21902.04
+          gender |   658.3466    417.642     1.58   0.118    -171.0076    1487.701
+           marry |   653.6716   856.9382     0.76   0.448    -1048.038    2355.381
+log_real_inc_per |   589.1749   381.3444     1.54   0.126    -168.0994    1346.449
+           rwork |  -820.5778   960.7945    -0.85   0.395    -2728.525     1087.37
+          rural2 |   1462.914   3357.354     0.44   0.664    -5204.125    8129.953
+             edu |   -345.771   243.0109    -1.42   0.158    -828.3425    136.8006
+          hchild |  -323.7342   371.2996    -0.87   0.386    -1061.062    413.5932
+          retire |  -874.8989   2255.974    -0.39   0.699    -5354.816    3605.018
+         adlab_c |  -312.6929   300.1141    -1.04   0.300      -908.66    283.2741
+          smoken |   877.6493   662.6776     1.32   0.189    -438.2971    2193.596
+          drinkl |  -1719.827   867.6945    -1.98   0.050    -3442.897    3.241919
+             srh |  -144.0931   424.0883    -0.34   0.735    -986.2484    698.0623
+             age |   7.801167    33.6669     0.23   0.817    -59.05462    74.65695
+                 |
+            year |
+           2013  |  -15438.68   6558.231    -2.35   0.021    -28462.03   -2415.336
+           2015  |   -26251.5   7509.928    -3.50   0.001    -41164.73   -11338.27
+           2018  |     -67206   10332.11    -6.50   0.000    -87723.53   -46688.47
+           2020  |   -73634.9   11239.54    -6.55   0.000    -95954.39   -51315.41
+                 |
+           _cons |   78310.08   6877.408    11.39   0.000     64652.91    91967.25
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     city_id |        94          94           0    *|
+-----------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+CHECK: SO2, path a, same sample, city + year FE and coefficients verified.
+
+Overriding estimator's cluster/robust settings with cluster(city_id)
+
+Wild bootstrap-t, null imposed, 9999 replications, Wald test, clustering by city_id, bootstrap clustering by city_id, Rademacher weights:
+  did
+
+                           t(93) =    -0.5454
+                        Prob>|t| =     0.6550
+
+95% confidence set for null hypothesis expression: [−48506.5819, 23331.1897]
+
+scalars:
+               r(NH0s) =  1
+               r(reps) =  9999
+               r(null) =  1
+               r(ptol) =  .0001
+              r(level) =  95
+                  r(p) =  .654965496549655
+                 r(df) =  1
+               r(df_r) =  93
+                  r(F) =  .2974288331103326
+                  r(t) =  -.5453703632489876
+
+macros:
+          r(clustvars) : "city_id"
+           r(boottype) : "wild"
+         r(weighttype) : "rademacher"
+          r(statistic) : "t"
+             r(robust) : "robust"
+              r(CIstr) : "[−48506.5819, 23331.1897]"
+               r(seed) : "2025"
+
+matrices:
+               r(dist) :  9999 x 1
+                 r(CI) :  1 x 2
+               r(plot) :  25 x 2
+                  r(V) :  1 x 1
+                  r(b) :  1 x 1
+
+__00000B[1,2]
+                 lo              hi
+did  -48506.5818971   23331.1897362
+COMPLETED: SO2, path a; WCB p =   0.65496550
+(MWFE estimator converged in 5 iterations)
+
+HDFE Linear regression                            Number of obs   =     15,430
+Absorbing 2 HDFE groups                           F(  15,     93) =      40.86
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.1328
+                                                  Adj R-squared   =     0.1264
+                                                  Within R-sq.    =     0.0954
+Number of clusters (city_id) =         94         Root MSE        =     0.6998
+
+                                   (Std. err. adjusted for 94 clusters in city_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+         outcome | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+           m_so2 |  -1.79e-07   1.83e-07    -0.98   0.330    -5.44e-07    1.85e-07
+             did |  -.0633291    .021863    -2.90   0.005    -.1067447   -.0199135
+          gender |  -.0460555    .016214    -2.84   0.006    -.0782532   -.0138578
+           marry |  -.1111743   .0226502    -4.91   0.000    -.1561532   -.0661955
+log_real_inc_per |  -.0440089   .0060736    -7.25   0.000    -.0560699   -.0319479
+           rwork |   .0284314   .0156212     1.82   0.072    -.0025892    .0594519
+          rural2 |   .0334789   .0223979     1.49   0.138    -.0109988    .0779566
+             edu |  -.0404317   .0075184    -5.38   0.000    -.0553616   -.0255017
+          hchild |  -.0056164   .0072102    -0.78   0.438    -.0199343    .0087016
+          retire |  -.0267475   .0157261    -1.70   0.092    -.0579764    .0044814
+         adlab_c |     .14941   .0123129    12.13   0.000      .124959    .1738609
+          smoken |   .0256429   .0145032     1.77   0.080    -.0031576    .0544434
+          drinkl |  -.0245208   .0139882    -1.75   0.083    -.0522986     .003257
+             srh |  -.1164322   .0082302   -14.15   0.000    -.1327757   -.1000887
+             age |  -.0014716   .0009217    -1.60   0.114    -.0033018    .0003587
+           _cons |   2.318688   .0994464    23.32   0.000     2.121207    2.516169
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     city_id |        94          94           0    *|
+        year |         5           1           4     |
+-----------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(MWFE estimator converged in 1 iterations)
+
+HDFE Linear regression                            Number of obs   =     15,430
+Absorbing 1 HDFE group                            F(  19,     93) =      37.39
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.1328
+                                                  Adj R-squared   =     0.1264
+                                                  Within R-sq.    =     0.0975
+Number of clusters (city_id) =         94         Root MSE        =     0.6998
+
+                                   (Std. err. adjusted for 94 clusters in city_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+         outcome | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+           m_so2 |  -1.79e-07   1.83e-07    -0.98   0.330    -5.44e-07    1.85e-07
+             did |  -.0633291    .021863    -2.90   0.005    -.1067447   -.0199135
+          gender |  -.0460555    .016214    -2.84   0.006    -.0782532   -.0138578
+           marry |  -.1111743   .0226502    -4.91   0.000    -.1561532   -.0661955
+log_real_inc_per |  -.0440089   .0060736    -7.25   0.000    -.0560699   -.0319479
+           rwork |   .0284314   .0156212     1.82   0.072    -.0025892    .0594519
+          rural2 |   .0334789   .0223979     1.49   0.138    -.0109988    .0779566
+             edu |  -.0404317   .0075184    -5.38   0.000    -.0553616   -.0255017
+          hchild |  -.0056164   .0072102    -0.78   0.438    -.0199343    .0087016
+          retire |  -.0267475   .0157261    -1.70   0.092    -.0579764    .0044814
+         adlab_c |     .14941   .0123129    12.13   0.000      .124959    .1738609
+          smoken |   .0256429   .0145032     1.77   0.080    -.0031576    .0544434
+          drinkl |  -.0245208   .0139882    -1.75   0.083    -.0522986     .003257
+             srh |  -.1164322   .0082302   -14.15   0.000    -.1327757   -.1000887
+             age |  -.0014716   .0009217    -1.60   0.114    -.0033018    .0003587
+                 |
+            year |
+           2013  |  -.0772603   .0219035    -3.53   0.001    -.1207563   -.0337644
+           2015  |   -.038665   .0265513    -1.46   0.149    -.0913906    .0140607
+           2018  |   .0689815   .0250258     2.76   0.007     .0192851    .1186779
+           2020  |   .0648401    .028933     2.24   0.027     .0073848    .1222954
+                 |
+           _cons |   2.298246   .0958819    23.97   0.000     2.107843    2.488648
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     city_id |        94          94           0    *|
+-----------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+CHECK: SO2, path b, same sample, city + year FE and coefficients verified.
+
+Overriding estimator's cluster/robust settings with cluster(city_id)
+
+Wild bootstrap-t, null imposed, 9999 replications, Wald test, clustering by city_id, bootstrap clustering by city_id, Rademacher weights:
+  m_so2
+
+                           t(93) =    -0.9790
+                        Prob>|t| =     0.4538
+
+95% confidence set for null hypothesis expression: [−5.1658892e−07, 6.2953992e−07]
+
+scalars:
+               r(NH0s) =  1
+               r(reps) =  9999
+               r(null) =  1
+               r(ptol) =  .0001
+              r(level) =  95
+                  r(p) =  .4538453845384539
+                 r(df) =  1
+               r(df_r) =  93
+                  r(F) =  .958420250627966
+                  r(t) =  -.9789894027148435
+
+macros:
+          r(clustvars) : "city_id"
+           r(boottype) : "wild"
+         r(weighttype) : "rademacher"
+          r(statistic) : "t"
+             r(robust) : "robust"
+              r(CIstr) : "[−5.1658892e−07, 6.2953992e−07]"
+               r(seed) : "2025"
+
+matrices:
+               r(dist) :  9999 x 1
+                 r(CI) :  1 x 2
+               r(plot) :  25 x 2
+                  r(V) :  1 x 1
+                  r(b) :  1 x 1
+
+__00000B[1,2]
+                       lo                  hi
+m_so2  -5.16588915248e-07   6.29539922879e-07
+COMPLETED: SO2, path b; WCB p =   0.45384538
+(Harmonized CHARLS Ver.D)
+(23,087 observations deleted)
+(MWFE estimator converged in 5 iterations)
+
+HDFE Linear regression                            Number of obs   =     11,141
+Absorbing 2 HDFE groups                           F(  14,     93) =       1.53
+Statistics robust to heteroskedasticity           Prob > F        =     0.1153
+                                                  R-squared       =     0.5627
+                                                  Adj R-squared   =     0.5583
+                                                  Within R-sq.    =     0.0133
+Number of clusters (city_id) =         94         Root MSE        =     0.2127
+
+                                   (Std. err. adjusted for 94 clusters in city_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+       m_medical | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+             did |   .1453625   .0667493     2.18   0.032     .0128116    .2779135
+          gender |  -.0028128   .0020263    -1.39   0.168    -.0068366    .0012111
+           marry |   .0030011   .0049943     0.60   0.549    -.0069166    .0129189
+log_real_inc_per |  -.0000335   .0020416    -0.02   0.987    -.0040877    .0040207
+           rwork |   .0041501   .0039469     1.05   0.296    -.0036876    .0119878
+          rural2 |   .0083767   .0092198     0.91   0.366     -.009932    .0266853
+             edu |    .001423   .0016874     0.84   0.401    -.0019279    .0047739
+          hchild |  -.0042963   .0028406    -1.51   0.134    -.0099371    .0013445
+          retire |   -.006546   .0065148    -1.00   0.318    -.0194831    .0063911
+         adlab_c |   .0011185   .0023938     0.47   0.641    -.0036352    .0058722
+          smoken |   .0084824   .0053205     1.59   0.114    -.0020832    .0190479
+          drinkl |  -.0036265   .0032406    -1.12   0.266    -.0100617    .0028087
+             srh |   .0042112   .0018603     2.26   0.026     .0005169    .0079054
+             age |   .0006962   .0003924     1.77   0.079    -.0000829    .0014753
+           _cons |   .3607071   .0329694    10.94   0.000     .2952364    .4261778
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     city_id |        94          94           0    *|
+        year |         4           1           3     |
+-----------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(MWFE estimator converged in 1 iterations)
+
+HDFE Linear regression                            Number of obs   =     11,141
+Absorbing 1 HDFE group                            F(  17,     93) =      10.04
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.5627
+                                                  Adj R-squared   =     0.5583
+                                                  Within R-sq.    =     0.2299
+Number of clusters (city_id) =         94         Root MSE        =     0.2127
+
+                                   (Std. err. adjusted for 94 clusters in city_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+       m_medical | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+             did |   .1453625   .0667493     2.18   0.032     .0128116    .2779135
+          gender |  -.0028128   .0020263    -1.39   0.168    -.0068366    .0012111
+           marry |   .0030011   .0049943     0.60   0.549    -.0069166    .0129189
+log_real_inc_per |  -.0000335   .0020416    -0.02   0.987    -.0040877    .0040207
+           rwork |   .0041501   .0039469     1.05   0.296    -.0036876    .0119878
+          rural2 |   .0083767   .0092198     0.91   0.366     -.009932    .0266853
+             edu |    .001423   .0016874     0.84   0.401    -.0019279    .0047739
+          hchild |  -.0042963   .0028406    -1.51   0.134    -.0099371    .0013445
+          retire |   -.006546   .0065148    -1.00   0.318    -.0194831    .0063911
+         adlab_c |   .0011185   .0023938     0.47   0.641    -.0036352    .0058722
+          smoken |   .0084824   .0053205     1.59   0.114    -.0020832    .0190479
+          drinkl |  -.0036265   .0032406    -1.12   0.266    -.0100617    .0028087
+             srh |   .0042112   .0018603     2.26   0.026     .0005169    .0079054
+             age |   .0006962   .0003924     1.77   0.079    -.0000829    .0014753
+                 |
+            year |
+           2013  |   .0652523   .0507224     1.29   0.201    -.0354723    .1659769
+           2015  |   .0110106    .021435     0.51   0.609     -.031555    .0535762
+           2018  |  -.2289333   .0346418    -6.61   0.000    -.2977251   -.1601415
+                 |
+           _cons |   .4311414   .0384739    11.21   0.000     .3547398     .507543
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     city_id |        94          94           0    *|
+-----------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+CHECK: Medical, path a, same sample, city + year FE and coefficients verified.
+
+Overriding estimator's cluster/robust settings with cluster(city_id)
+
+Wild bootstrap-t, null imposed, 9999 replications, Wald test, clustering by city_id, bootstrap clustering by city_id, Rademacher weights:
+  did
+
+                           t(93) =     2.1777
+                        Prob>|t| =     0.1157
+
+95% confidence set for null hypothesis expression: [−.0630187248, .270975665]
+
+scalars:
+               r(NH0s) =  1
+               r(reps) =  9999
+               r(null) =  1
+               r(ptol) =  .0001
+              r(level) =  95
+                  r(p) =  .1157115711571157
+                 r(df) =  1
+               r(df_r) =  93
+                  r(F) =  4.742539739648626
+                  r(t) =  2.177737298125884
+
+macros:
+          r(clustvars) : "city_id"
+           r(boottype) : "wild"
+         r(weighttype) : "rademacher"
+          r(statistic) : "t"
+             r(robust) : "robust"
+              r(CIstr) : "[−.0630187248, .270975665]"
+               r(seed) : "2025"
+
+matrices:
+               r(dist) :  9999 x 1
+                 r(CI) :  1 x 2
+               r(plot) :  25 x 2
+                  r(V) :  1 x 1
+                  r(b) :  1 x 1
+
+__00000B[1,2]
+                 lo              hi
+did  -.063018724808   .270975665471
+COMPLETED: Medical, path a; WCB p =   0.11571157
+(MWFE estimator converged in 5 iterations)
+
+HDFE Linear regression                            Number of obs   =     11,141
+Absorbing 2 HDFE groups                           F(  15,     93) =      36.87
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.1274
+                                                  Adj R-squared   =     0.1186
+                                                  Within R-sq.    =     0.0884
+Number of clusters (city_id) =         94         Root MSE        =     0.6908
+
+                                   (Std. err. adjusted for 94 clusters in city_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+         outcome | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+       m_medical |   -.017084   .0461204    -0.37   0.712      -.10867    .0745019
+             did |  -.0450336   .0285354    -1.58   0.118    -.1016992    .0116321
+          gender |  -.0541062    .016617    -3.26   0.002    -.0871043   -.0211082
+           marry |   -.115498   .0245663    -4.70   0.000    -.1642819   -.0667141
+log_real_inc_per |  -.0498013   .0066473    -7.49   0.000    -.0630016    -.036601
+           rwork |   .0078441   .0181053     0.43   0.666    -.0281095    .0437978
+          rural2 |   .0079978    .025005     0.32   0.750    -.0416571    .0576527
+             edu |  -.0342153   .0086174    -3.97   0.000    -.0513277    -.017103
+          hchild |  -.0057878   .0082002    -0.71   0.482    -.0220718    .0104961
+          retire |  -.0512118   .0177508    -2.89   0.005    -.0864614   -.0159622
+         adlab_c |   .1311983   .0139393     9.41   0.000     .1035176    .1588791
+          smoken |   .0325432   .0171043     1.90   0.060    -.0014226    .0665089
+          drinkl |  -.0039109   .0175108    -0.22   0.824    -.0386839    .0308621
+             srh |  -.1163367   .0087632   -13.28   0.000    -.1337387   -.0989346
+             age |   -.002105   .0009811    -2.15   0.035    -.0040532   -.0001567
+           _cons |   2.413348   .1134086    21.28   0.000     2.188141    2.638555
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     city_id |        94          94           0    *|
+        year |         4           1           3     |
+-----------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(MWFE estimator converged in 1 iterations)
+
+HDFE Linear regression                            Number of obs   =     11,141
+Absorbing 1 HDFE group                            F(  18,     93) =      34.52
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.1274
+                                                  Adj R-squared   =     0.1186
+                                                  Within R-sq.    =     0.0913
+Number of clusters (city_id) =         94         Root MSE        =     0.6908
+
+                                   (Std. err. adjusted for 94 clusters in city_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+         outcome | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+       m_medical |   -.017084   .0461204    -0.37   0.712      -.10867    .0745019
+             did |  -.0450336   .0285354    -1.58   0.118    -.1016992    .0116321
+          gender |  -.0541062    .016617    -3.26   0.002    -.0871043   -.0211082
+           marry |   -.115498   .0245663    -4.70   0.000    -.1642819   -.0667141
+log_real_inc_per |  -.0498013   .0066473    -7.49   0.000    -.0630016    -.036601
+           rwork |   .0078441   .0181053     0.43   0.666    -.0281095    .0437978
+          rural2 |   .0079978    .025005     0.32   0.750    -.0416571    .0576527
+             edu |  -.0342153   .0086174    -3.97   0.000    -.0513277    -.017103
+          hchild |  -.0057878   .0082002    -0.71   0.482    -.0220718    .0104961
+          retire |  -.0512118   .0177508    -2.89   0.005    -.0864614   -.0159622
+         adlab_c |   .1311983   .0139393     9.41   0.000     .1035176    .1588791
+          smoken |   .0325432   .0171043     1.90   0.060    -.0014226    .0665089
+          drinkl |  -.0039109   .0175108    -0.22   0.824    -.0386839    .0308621
+             srh |  -.1163367   .0087632   -13.28   0.000    -.1337387   -.0989346
+             age |   -.002105   .0009811    -2.15   0.035    -.0040532   -.0001567
+                 |
+            year |
+           2013  |  -.0703982   .0219186    -3.21   0.002    -.1139242   -.0268722
+           2015  |  -.0324189   .0273019    -1.19   0.238    -.0866351    .0217973
+           2018  |   .0833049   .0255462     3.26   0.002     .0325751    .1340347
+                 |
+           _cons |   2.402174   .1087249    22.09   0.000     2.186268     2.61808
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     city_id |        94          94           0    *|
+-----------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+CHECK: Medical, path b, same sample, city + year FE and coefficients verified.
+
+Overriding estimator's cluster/robust settings with cluster(city_id)
+
+Wild bootstrap-t, null imposed, 9999 replications, Wald test, clustering by city_id, bootstrap clustering by city_id, Rademacher weights:
+  m_medical
+
+                           t(93) =    -0.3704
+                        Prob>|t| =     0.6887
+
+95% confidence set for null hypothesis expression: [−.105122032, .21866392]
+
+scalars:
+               r(NH0s) =  1
+               r(reps) =  9999
+               r(null) =  1
+               r(ptol) =  .0001
+              r(level) =  95
+                  r(p) =  .6886688668866887
+                 r(df) =  1
+               r(df_r) =  93
+                  r(F) =  .1372127595895386
+                  r(t) =  -.3704224069755211
+
+macros:
+          r(clustvars) : "city_id"
+           r(boottype) : "wild"
+         r(weighttype) : "rademacher"
+          r(statistic) : "t"
+             r(robust) : "robust"
+              r(CIstr) : "[−.105122032, .21866392]"
+               r(seed) : "2025"
+
+matrices:
+               r(dist) :  9999 x 1
+                 r(CI) :  1 x 2
+               r(plot) :  25 x 2
+                  r(V) :  1 x 1
+                  r(b) :  1 x 1
+
+__00000B[1,2]
+                       lo              hi
+m_medical  -.105122032118   .218663920041
+COMPLETED: Medical, path b; WCB p =   0.68866887
+(Harmonized CHARLS Ver.D)
+(17,567 observations deleted)
+(MWFE estimator converged in 5 iterations)
+
+HDFE Linear regression                            Number of obs   =     16,661
+Absorbing 2 HDFE groups                           F(  14,     93) =       0.85
+Statistics robust to heteroskedasticity           Prob > F        =     0.6133
+                                                  R-squared       =     0.9408
+                                                  Adj R-squared   =     0.9404
+                                                  Within R-sq.    =     0.0314
+Number of clusters (city_id) =         94         Root MSE        =     4.4210
+
+                                   (Std. err. adjusted for 94 clusters in city_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+          m_pm25 | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+             did |  -4.850085   2.805024    -1.73   0.087    -10.42031     .720137
+          gender |  -.0369778    .082036    -0.45   0.653    -.1998851    .1259295
+           marry |  -.0089038   .1338782    -0.07   0.947    -.2747595    .2569518
+log_real_inc_per |  -.0440963   .0529065    -0.83   0.407    -.1491582    .0609655
+           rwork |   .0582239   .1113317     0.52   0.602    -.1628589    .2793067
+          rural2 |  -.3008675   .2349308    -1.28   0.203    -.7673935    .1656585
+             edu |  -.0115849   .0429764    -0.27   0.788    -.0969276    .0737577
+          hchild |  -.0125305   .0447595    -0.28   0.780    -.1014141     .076353
+          retire |  -.1914319   .1341645    -1.43   0.157     -.457856    .0749923
+         adlab_c |  -.0431389   .0495215    -0.87   0.386    -.1414788     .055201
+          smoken |  -.0400959   .0908244    -0.44   0.660    -.2204553    .1402634
+          drinkl |   .0616569   .1167563     0.53   0.599    -.1701981    .2935118
+             srh |  -.0330844   .0347819    -0.95   0.344    -.1021543    .0359854
+             age |   .0082179   .0056222     1.46   0.147    -.0029468    .0193825
+           _cons |   45.33916   .6221213    72.88   0.000     44.10375    46.57457
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     city_id |        94          94           0    *|
+        year |         5           1           4     |
+-----------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(MWFE estimator converged in 1 iterations)
+
+HDFE Linear regression                            Number of obs   =     16,661
+Absorbing 1 HDFE group                            F(  18,     93) =      61.90
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.9408
+                                                  Adj R-squared   =     0.9404
+                                                  Within R-sq.    =     0.8691
+Number of clusters (city_id) =         94         Root MSE        =     4.4210
+
+                                   (Std. err. adjusted for 94 clusters in city_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+          m_pm25 | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+             did |  -4.850085   2.805024    -1.73   0.087    -10.42031     .720137
+          gender |  -.0369778    .082036    -0.45   0.653    -.1998851    .1259295
+           marry |  -.0089038   .1338782    -0.07   0.947    -.2747595    .2569518
+log_real_inc_per |  -.0440963   .0529065    -0.83   0.407    -.1491582    .0609655
+           rwork |   .0582239   .1113317     0.52   0.602    -.1628589    .2793067
+          rural2 |  -.3008675   .2349308    -1.28   0.203    -.7673935    .1656585
+             edu |  -.0115849   .0429764    -0.27   0.788    -.0969276    .0737577
+          hchild |  -.0125305   .0447595    -0.28   0.780    -.1014141     .076353
+          retire |  -.1914319   .1341645    -1.43   0.157     -.457856    .0749923
+         adlab_c |  -.0431389   .0495215    -0.87   0.386    -.1414788     .055201
+          smoken |  -.0400959   .0908244    -0.44   0.660    -.2204553    .1402634
+          drinkl |   .0616569   .1167563     0.53   0.599    -.1701981    .2935118
+             srh |  -.0330844   .0347819    -0.95   0.344    -.1021543    .0359854
+             age |   .0082179   .0056222     1.46   0.147    -.0029468    .0193825
+                 |
+            year |
+           2013  |   3.979889   .5191541     7.67   0.000     2.948952    5.010826
+           2015  |  -9.041669    .850516   -10.63   0.000    -10.73062   -7.352712
+           2018  |  -19.18835   .9247553   -20.75   0.000    -21.02473   -17.35197
+           2020  |  -25.01854   1.100675   -22.73   0.000    -27.20426   -22.83282
+                 |
+           _cons |   58.97431   .6683556    88.24   0.000     57.64709    60.30154
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     city_id |        94          94           0    *|
+-----------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+CHECK: PM25, path a, same sample, city + year FE and coefficients verified.
+
+Overriding estimator's cluster/robust settings with cluster(city_id)
+
+Wild bootstrap-t, null imposed, 9999 replications, Wald test, clustering by city_id, bootstrap clustering by city_id, Rademacher weights:
+  did
+
+                           t(93) =    -1.7291
+                        Prob>|t| =     0.1910
+
+95% confidence set for null hypothesis expression: [−11.219685, 4.39301375]
+
+scalars:
+               r(NH0s) =  1
+               r(reps) =  9999
+               r(null) =  1
+               r(ptol) =  .0001
+              r(level) =  95
+                  r(p) =  .191019101910191
+                 r(df) =  1
+               r(df_r) =  93
+                  r(F) =  2.989685410523437
+                  r(t) =  -1.729070678290346
+
+macros:
+          r(clustvars) : "city_id"
+           r(boottype) : "wild"
+         r(weighttype) : "rademacher"
+          r(statistic) : "t"
+             r(robust) : "robust"
+              r(CIstr) : "[−11.219685, 4.39301375]"
+               r(seed) : "2025"
+
+matrices:
+               r(dist) :  9999 x 1
+                 r(CI) :  1 x 2
+               r(plot) :  25 x 2
+                  r(V) :  1 x 1
+                  r(b) :  1 x 1
+
+__00000B[1,2]
+                lo             hi
+did   -11.21968503  4.39301374859
+COMPLETED: PM25, path a; WCB p =   0.19101910
+(MWFE estimator converged in 5 iterations)
+
+HDFE Linear regression                            Number of obs   =     16,661
+Absorbing 2 HDFE groups                           F(  15,     93) =      44.03
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.1318
+                                                  Adj R-squared   =     0.1260
+                                                  Within R-sq.    =     0.0968
+Number of clusters (city_id) =         94         Root MSE        =     0.6977
+
+                                   (Std. err. adjusted for 94 clusters in city_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+         outcome | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+          m_pm25 |  -.0009008    .001374    -0.66   0.514    -.0036293    .0018278
+             did |  -.0910482   .0328963    -2.77   0.007    -.1563738   -.0257226
+          gender |  -.0461452   .0154295    -2.99   0.004    -.0767852   -.0155051
+           marry |  -.1147413   .0215135    -5.33   0.000    -.1574629   -.0720197
+log_real_inc_per |  -.0472811   .0062375    -7.58   0.000    -.0596675   -.0348947
+           rwork |   .0237144   .0150917     1.57   0.119    -.0062547    .0536835
+          rural2 |   .0181032    .021873     0.83   0.410    -.0253323    .0615387
+             edu |  -.0426306   .0071976    -5.92   0.000    -.0569236   -.0283375
+          hchild |  -.0042388   .0069459    -0.61   0.543    -.0180319    .0095543
+          retire |  -.0367195   .0144924    -2.53   0.013    -.0654986   -.0079404
+         adlab_c |   .1512506   .0117231    12.90   0.000     .1279709    .1745303
+          smoken |   .0268366    .013935     1.93   0.057    -.0008355    .0545087
+          drinkl |  -.0197443   .0137594    -1.43   0.155    -.0470678    .0075792
+             srh |  -.1132696   .0077968   -14.53   0.000    -.1287524   -.0977868
+             age |  -.0016067   .0008702    -1.85   0.068    -.0033348    .0001214
+           _cons |    2.40016   .1188663    20.19   0.000     2.164115    2.636205
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     city_id |        94          94           0    *|
+        year |         5           1           4     |
+-----------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(MWFE estimator converged in 1 iterations)
+
+HDFE Linear regression                            Number of obs   =     16,661
+Absorbing 1 HDFE group                            F(  19,     93) =      39.87
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.1318
+                                                  Adj R-squared   =     0.1260
+                                                  Within R-sq.    =     0.0988
+Number of clusters (city_id) =         94         Root MSE        =     0.6977
+
+                                   (Std. err. adjusted for 94 clusters in city_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+         outcome | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+          m_pm25 |  -.0009008    .001374    -0.66   0.514    -.0036293    .0018278
+             did |  -.0910482   .0328963    -2.77   0.007    -.1563738   -.0257226
+          gender |  -.0461452   .0154295    -2.99   0.004    -.0767852   -.0155051
+           marry |  -.1147413   .0215135    -5.33   0.000    -.1574629   -.0720197
+log_real_inc_per |  -.0472811   .0062375    -7.58   0.000    -.0596675   -.0348947
+           rwork |   .0237144   .0150917     1.57   0.119    -.0062547    .0536835
+          rural2 |   .0181032    .021873     0.83   0.410    -.0253323    .0615387
+             edu |  -.0426306   .0071976    -5.92   0.000    -.0569236   -.0283375
+          hchild |  -.0042388   .0069459    -0.61   0.543    -.0180319    .0095543
+          retire |  -.0367195   .0144924    -2.53   0.013    -.0654986   -.0079404
+         adlab_c |   .1512506   .0117231    12.90   0.000     .1279709    .1745303
+          smoken |   .0268366    .013935     1.93   0.057    -.0008355    .0545087
+          drinkl |  -.0197443   .0137594    -1.43   0.155    -.0470678    .0075792
+             srh |  -.1132696   .0077968   -14.53   0.000    -.1287524   -.0977868
+             age |  -.0016067   .0008702    -1.85   0.068    -.0033348    .0001214
+                 |
+            year |
+           2013  |   -.069921   .0210405    -3.32   0.001    -.1117032   -.0281388
+           2015  |  -.0408034   .0311598    -1.31   0.194    -.1026807    .0210739
+           2018  |   .0746611   .0405781     1.84   0.069    -.0059189    .1552411
+           2020  |   .0557394    .043713     1.28   0.205    -.0310659    .1425447
+                 |
+           _cons |   2.377324   .1282005    18.54   0.000     2.122743    2.631905
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     city_id |        94          94           0    *|
+-----------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+CHECK: PM25, path b, same sample, city + year FE and coefficients verified.
+
+Overriding estimator's cluster/robust settings with cluster(city_id)
+
+Wild bootstrap-t, null imposed, 9999 replications, Wald test, clustering by city_id, bootstrap clustering by city_id, Rademacher weights:
+  m_pm25
+
+                           t(93) =    -0.6555
+                        Prob>|t| =     0.5338
+
+95% confidence set for null hypothesis expression: [−.00381756266, .0019622702]
+
+scalars:
+               r(NH0s) =  1
+               r(reps) =  9999
+               r(null) =  1
+               r(ptol) =  .0001
+              r(level) =  95
+                  r(p) =  .5337533753375338
+                 r(df) =  1
+               r(df_r) =  93
+                  r(F) =  .4297442886252806
+                  r(t) =  -.6555488453389882
+
+macros:
+          r(clustvars) : "city_id"
+           r(boottype) : "wild"
+         r(weighttype) : "rademacher"
+          r(statistic) : "t"
+             r(robust) : "robust"
+              r(CIstr) : "[−.00381756266, .0019622702]"
+               r(seed) : "2025"
+
+matrices:
+               r(dist) :  9999 x 1
+                 r(CI) :  1 x 2
+               r(plot) :  25 x 2
+                  r(V) :  1 x 1
+                  r(b) :  1 x 1
+
+__00000B[1,2]
+                      lo                hi
+m_pm25  -.00381756266132   .00196227019504
+COMPLETED: PM25, path b; WCB p =   0.53375338
+(Harmonized CHARLS Ver.D)
+(17,568 observations deleted)
+(MWFE estimator converged in 5 iterations)
+
+HDFE Linear regression                            Number of obs   =     16,660
+Absorbing 2 HDFE groups                           F(  14,     93) =      45.88
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.0897
+                                                  Adj R-squared   =     0.0836
+                                                  Within R-sq.    =     0.0439
+Number of clusters (city_id) =         94         Root MSE        =     0.6569
+
+                                   (Std. err. adjusted for 94 clusters in city_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+        m_social | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+             did |   .0628689   .0281959     2.23   0.028     .0068775    .1188603
+          gender |  -.0609206   .0146326    -4.16   0.000     -.089978   -.0318633
+           marry |  -.0550744   .0204521    -2.69   0.008    -.0956882   -.0144606
+log_real_inc_per |   .0304246   .0041881     7.26   0.000      .022108    .0387413
+           rwork |  -.0543369   .0173135    -3.14   0.002     -.088718   -.0199558
+          rural2 |  -.0316266   .0243171    -1.30   0.197    -.0799156    .0166623
+             edu |   .0474665   .0076629     6.19   0.000     .0322495    .0626835
+          hchild |  -.0035298   .0072578    -0.49   0.628    -.0179423    .0108828
+          retire |   .0662705   .0209986     3.16   0.002     .0245715    .1079696
+         adlab_c |  -.0442959   .0065275    -6.79   0.000    -.0572583   -.0313336
+          smoken |   .1206725   .0186287     6.48   0.000     .0836795    .1576655
+          drinkl |   .1440399   .0157089     9.17   0.000     .1128451    .1752346
+             srh |   .0124029   .0063873     1.94   0.055     -.000281    .0250867
+             age |  -.0023824   .0010691    -2.23   0.028    -.0045054   -.0002595
+           _cons |   .3310198   .0938029     3.53   0.001     .1447458    .5172938
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     city_id |        94          94           0    *|
+        year |         5           1           4     |
+-----------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(MWFE estimator converged in 1 iterations)
+
+HDFE Linear regression                            Number of obs   =     16,660
+Absorbing 1 HDFE group                            F(  18,     93) =      41.41
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.0897
+                                                  Adj R-squared   =     0.0836
+                                                  Within R-sq.    =     0.0466
+Number of clusters (city_id) =         94         Root MSE        =     0.6569
+
+                                   (Std. err. adjusted for 94 clusters in city_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+        m_social | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+             did |   .0628689   .0281959     2.23   0.028     .0068775    .1188603
+          gender |  -.0609206   .0146326    -4.16   0.000     -.089978   -.0318633
+           marry |  -.0550744   .0204521    -2.69   0.008    -.0956882   -.0144606
+log_real_inc_per |   .0304246   .0041881     7.26   0.000      .022108    .0387413
+           rwork |  -.0543369   .0173135    -3.14   0.002     -.088718   -.0199558
+          rural2 |  -.0316266   .0243171    -1.30   0.197    -.0799156    .0166623
+             edu |   .0474665   .0076629     6.19   0.000     .0322495    .0626835
+          hchild |  -.0035298   .0072578    -0.49   0.628    -.0179423    .0108828
+          retire |   .0662705   .0209986     3.16   0.002     .0245715    .1079696
+         adlab_c |  -.0442959   .0065275    -6.79   0.000    -.0572583   -.0313336
+          smoken |   .1206725   .0186287     6.48   0.000     .0836795    .1576655
+          drinkl |   .1440399   .0157089     9.17   0.000     .1128451    .1752346
+             srh |   .0124029   .0063873     1.94   0.055     -.000281    .0250867
+             age |  -.0023824   .0010691    -2.23   0.028    -.0045054   -.0002595
+                 |
+            year |
+           2013  |   .0969942   .0277938     3.49   0.001     .0418013    .1521871
+           2015  |   .0947925   .0243162     3.90   0.000     .0465053    .1430797
+           2018  |  -.0101861   .0245358    -0.42   0.679    -.0589093    .0385371
+           2020  |  -.0378174   .0260052    -1.45   0.149    -.0894586    .0138237
+                 |
+           _cons |   .3216965   .0895181     3.59   0.001     .1439314    .4994616
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     city_id |        94          94           0    *|
+-----------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+CHECK: Social, path a, same sample, city + year FE and coefficients verified.
+
+Overriding estimator's cluster/robust settings with cluster(city_id)
+
+Wild bootstrap-t, null imposed, 9999 replications, Wald test, clustering by city_id, bootstrap clustering by city_id, Rademacher weights:
+  did
+
+                           t(93) =     2.2297
+                        Prob>|t| =     0.0935
+
+95% confidence set for null hypothesis expression: [−.0265527728, .122822352]
+
+scalars:
+               r(NH0s) =  1
+               r(reps) =  9999
+               r(null) =  1
+               r(ptol) =  .0001
+              r(level) =  95
+                  r(p) =  .0935093509350935
+                 r(df) =  1
+               r(df_r) =  93
+                  r(F) =  4.971650967703813
+                  r(t) =  2.229719930328429
+
+macros:
+          r(clustvars) : "city_id"
+           r(boottype) : "wild"
+         r(weighttype) : "rademacher"
+          r(statistic) : "t"
+             r(robust) : "robust"
+              r(CIstr) : "[−.0265527728, .122822352]"
+               r(seed) : "2025"
+
+matrices:
+               r(dist) :  9999 x 1
+                 r(CI) :  1 x 2
+               r(plot) :  25 x 2
+                  r(V) :  1 x 1
+                  r(b) :  1 x 1
+
+__00000B[1,2]
+                  lo               hi
+did  -.0265527727827    .122822352184
+COMPLETED: Social, path a; WCB p =   0.09350935
+(MWFE estimator converged in 5 iterations)
+
+HDFE Linear regression                            Number of obs   =     16,660
+Absorbing 2 HDFE groups                           F(  15,     93) =      45.67
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.1331
+                                                  Adj R-squared   =     0.1272
+                                                  Within R-sq.    =     0.0981
+Number of clusters (city_id) =         94         Root MSE        =     0.6972
+
+                                   (Std. err. adjusted for 94 clusters in city_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+         outcome | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+        m_social |  -.0410427   .0089744    -4.57   0.000    -.0588641   -.0232212
+             did |   -.084099    .032848    -2.56   0.012    -.1493287   -.0188694
+          gender |  -.0486121   .0154388    -3.15   0.002    -.0792706   -.0179536
+           marry |  -.1169936   .0215935    -5.42   0.000     -.159874   -.0741131
+log_real_inc_per |  -.0459926   .0062631    -7.34   0.000      -.05843   -.0335552
+           rwork |   .0214317   .0150688     1.42   0.158    -.0084918    .0513553
+          rural2 |   .0170764    .021899     0.78   0.438    -.0264108    .0605635
+             edu |   -.040672   .0071909    -5.66   0.000    -.0549516   -.0263924
+          hchild |  -.0043723   .0069143    -0.63   0.529    -.0181027    .0093581
+          retire |   -.033827   .0145728    -2.32   0.022    -.0627657   -.0048883
+         adlab_c |   .1494714   .0116292    12.85   0.000     .1263781    .1725647
+          smoken |   .0318258   .0141707     2.25   0.027     .0036856     .059966
+          drinkl |  -.0138883   .0137171    -1.01   0.314    -.0411277    .0133512
+             srh |  -.1127307   .0078594   -14.34   0.000     -.128338   -.0971234
+             age |  -.0017119   .0008633    -1.98   0.050    -.0034262    2.45e-06
+           _cons |   2.372908    .097751    24.28   0.000     2.178793    2.567022
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     city_id |        94          94           0    *|
+        year |         5           1           4     |
+-----------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(MWFE estimator converged in 1 iterations)
+
+HDFE Linear regression                            Number of obs   =     16,660
+Absorbing 1 HDFE group                            F(  19,     93) =      39.67
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.1331
+                                                  Adj R-squared   =     0.1272
+                                                  Within R-sq.    =     0.1001
+Number of clusters (city_id) =         94         Root MSE        =     0.6972
+
+                                   (Std. err. adjusted for 94 clusters in city_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+         outcome | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+        m_social |  -.0410427   .0089744    -4.57   0.000    -.0588641   -.0232212
+             did |   -.084099    .032848    -2.56   0.012    -.1493287   -.0188694
+          gender |  -.0486121   .0154388    -3.15   0.002    -.0792706   -.0179536
+           marry |  -.1169936   .0215935    -5.42   0.000     -.159874   -.0741131
+log_real_inc_per |  -.0459926   .0062631    -7.34   0.000      -.05843   -.0335552
+           rwork |   .0214317   .0150688     1.42   0.158    -.0084918    .0513553
+          rural2 |   .0170764    .021899     0.78   0.438    -.0264108    .0605635
+             edu |   -.040672   .0071909    -5.66   0.000    -.0549516   -.0263924
+          hchild |  -.0043723   .0069143    -0.63   0.529    -.0181027    .0093581
+          retire |   -.033827   .0145728    -2.32   0.022    -.0627657   -.0048883
+         adlab_c |   .1494714   .0116292    12.85   0.000     .1263781    .1725647
+          smoken |   .0318258   .0141707     2.25   0.027     .0036856     .059966
+          drinkl |  -.0138883   .0137171    -1.01   0.314    -.0411277    .0133512
+             srh |  -.1127307   .0078594   -14.34   0.000     -.128338   -.0971234
+             age |  -.0017119   .0008633    -1.98   0.050    -.0034262    2.45e-06
+                 |
+            year |
+           2013  |  -.0695255   .0215178    -3.23   0.002    -.1122555   -.0267954
+           2015  |   -.028769   .0273873    -1.05   0.296    -.0831547    .0256167
+           2018  |   .0915265   .0242898     3.77   0.000     .0432918    .1397613
+           2020  |   .0767223   .0233014     3.29   0.001     .0304503    .1229943
+                 |
+           _cons |   2.337406   .0922053    25.35   0.000     2.154304    2.520507
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     city_id |        94          94           0    *|
+-----------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+CHECK: Social, path b, same sample, city + year FE and coefficients verified.
+
+Overriding estimator's cluster/robust settings with cluster(city_id)
+
+Wild bootstrap-t, null imposed, 9999 replications, Wald test, clustering by city_id, bootstrap clustering by city_id, Rademacher weights:
+  m_social
+
+                           t(93) =    -4.5733
+                        Prob>|t| =     0.0000
+
+95% confidence set for null hypothesis expression: [−.0588427638, −.0227405032]
+
+scalars:
+               r(NH0s) =  1
+               r(reps) =  9999
+               r(null) =  1
+               r(ptol) =  .0001
+              r(level) =  95
+                  r(p) =  0
+                 r(df) =  1
+               r(df_r) =  93
+                  r(F) =  20.91497723604121
+                  r(t) =  -4.573289542117491
+
+macros:
+          r(clustvars) : "city_id"
+           r(boottype) : "wild"
+         r(weighttype) : "rademacher"
+          r(statistic) : "t"
+             r(robust) : "robust"
+              r(CIstr) : "[−.0588427638, −.0227405032]"
+               r(seed) : "2025"
+
+matrices:
+               r(dist) :  9999 x 1
+                 r(CI) :  1 x 2
+               r(plot) :  25 x 2
+                  r(V) :  1 x 1
+                  r(b) :  1 x 1
+
+__00000B[1,2]
+                       lo               hi
+m_social  -.0588427637709  -.0227405032134
+COMPLETED: Social, path b; WCB p =   0.00000000
+
+. postclose `result'
+
+. use `summary', clear
+
+. format Estimate City_SE City_p WCB_p WCB_CI_L WCB_CI_U %14.9g
+
+. export delimited using "results/wild/wild_cluster_`repetitions'.csv", replace
+(file results/wild/wild_cluster_9999.csv not found)
+file results/wild/wild_cluster_9999.csv saved
+
+. list Candidate Path N Estimate City_p WCB_p WCB_CI_L WCB_CI_U, clean noobs
+
+    Candid~e   Path       N         Estimate          City_p         WCB_p         WCB_CI_L        WCB_CI_U  
+     Overall      c   16661     -.0866794779      .010184314   .0200020002      -.166171915    -.0142712661  
+       Green      a   16661       .378437669      .528537224    .552755276      -1.33470599      1.59585865  
+       Green      b   16661     -.0074059126      .036388645   .0704070407     -.0148812569   .000777399908  
+        Road      a   16661      -2.30522668     .0266341404   .0622062206      -5.21589474      .156325899  
+        Road      b   16661   -.000214144724       .93603307    .940594059    -.00554792519    .00529918223  
+         SO2      a   15430      -8292.46247      .586804466    .654965497      -48506.5819      23331.1897  
+         SO2      b   15430   -1.7949220e-07      .330125067    .453845385   -5.1658892e-07   6.2953992e-07  
+     Medical      a   11141       .145362511     .0319555831    .115711571     -.0630187248      .270975665  
+     Medical      b   11141     -.0170840224      .711910109    .688668867      -.105122032       .21866392  
+        PM25      a   16661      -4.85008452     .0871146206    .191019102       -11.219685      4.39301375  
+        PM25      b   16661   -.000900751148      .513732873    .533753375    -.00381756266     .0019622702  
+      Social      a   16660      .0628688795     .0281728292   .0935093509     -.0265527728      .122822352  
+      Social      b   16660     -.0410426572   .000014778778             0     -.0588427638    -.0227405032  
+
+. display "ALL 13 TESTS COMPLETED. No nonlinear a*b test was performed."
+ALL 13 TESTS COMPLETED. No nonlinear a*b test was performed.
+
+. log close wcb_log
+      name:  wcb_log
+       log:  <LOCAL_HOME>/Documents/honor thesis/hpr_reproducibility_release_20261103/HealthyCity_Mediation_Reproducibility/runs/full_202611
+> 03_125706_909486/logs/wild_cluster_9999.log
+  log type:  text
+ closed on:   3 Nov 2026, 12:58:05
+--------------------------------------------------------------------------------------------------------------------------------------------

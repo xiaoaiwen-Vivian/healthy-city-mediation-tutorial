@@ -1,0 +1,15 @@
+Candidate Path     N      Estimate    WCB_p  WCB_BH_adjusted_p
+  Overall    c 16661 -8.667948e-02 0.020002                NaN
+    Green    a 16661  3.784377e-01 0.552755           0.654965
+    Green    b 16661 -7.405913e-03 0.070407           0.211221
+     Road    a 16661 -2.305227e+00 0.062206           0.231423
+     Road    b 16661 -2.141447e-04 0.940594           0.940594
+      SO2    a 15430 -8.292462e+03 0.654965           0.654965
+      SO2    b 15430 -1.794922e-07 0.453845           0.800630
+  Medical    a 11141  1.453625e-01 0.115712           0.231423
+  Medical    b 11141 -1.708402e-02 0.688669           0.826403
+     PM25    a 16661 -4.850085e+00 0.191019           0.286529
+     PM25    b 16661 -9.007511e-04 0.533753           0.800630
+   Social    a 16660  6.286888e-02 0.093509           0.231423
+   Social    b 16660 -4.104266e-02 0.000000           0.000000
+All 13 WCB tests retained. These are component/overall coefficient tests, not tests of a*b.

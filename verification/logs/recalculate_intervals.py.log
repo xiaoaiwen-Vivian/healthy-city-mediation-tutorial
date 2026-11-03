@@ -1,0 +1,4 @@
+     Level Mediator    B     Pct_L     Pct_U      BC_L      BC_U        z0  BC_prob_L  BC_prob_U  Negative  Positive  Zero  sign_tail
+      city   Social 2000 -0.005465  0.000120 -0.005866 -0.000173 -0.085329   0.016560   0.963217      1944        56     0   0.056972
+individual   Social 2000 -0.005524 -0.000135 -0.005720 -0.000258 -0.067731   0.018067   0.965962      1959        41     0   0.041979
+All 12 interval and sign-count summaries reproduced.

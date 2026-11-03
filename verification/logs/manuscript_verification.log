@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "manuscript_view": "Current text: insertions included, deletions excluded",
+  "active_tables": 12,
+  "numeric_tables_checked": 10,
+  "displayed_numeric_entries_checked": 288,
+  "mismatches": 0,
+  "table_order": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "S1"
+  ],
+  "scope": "Numerical entries in Tables 2-5, 7-11 and S1. This is not a prose, citation, code-snippet or page-layout check."
+}
+MANUSCRIPT_TABLES_VERIFIED

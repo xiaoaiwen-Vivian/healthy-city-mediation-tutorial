@@ -1,0 +1,180 @@
+--------------------------------------------------------------------------------------------------------------------------------------------
+      name:  feexample
+       log:  <LOCAL_HOME>/Documents/honor thesis/hpr_reproducibility_release_20261103/HealthyCity_Mediation_Reproducibility/runs/full_202611
+> 03_125706_909486/logs/worked_fe_examples.log
+  log type:  text
+ opened on:   3 Nov 2026, 12:57:52
+
+. use "`input_path'", clear
+(Harmonized CHARLS Ver.D)
+
+. rename (ID iwy treat rgoingl) (person_id year treated outcome)
+
+. replace city=strtrim(city)
+(0 real changes made)
+
+. drop if missing(person_id) | missing(city) | missing(year)
+(1,310 observations deleted)
+
+. drop if missing(wave)
+(0 observations deleted)
+
+. keep if age>=45 & age<. & rural==0
+(51,158 observations deleted)
+
+. capture drop did
+
+. generate double did=treated*(year>=2017)
+
+. egen long city_id=group(city)
+
+. egen long respondent_id=group(person_id)
+
+. local controls gender marry log_real_inc_per rwork rural2 edu ///
+>     hchild retire adlab_c smoken drinkl srh age
+
+. 
+. * Retain the policy model's complete observations before comparing fixed effects.
+. quietly reghdfe outcome did `controls', ///
+>     absorb(city_id year) vce(cluster city_id)
+
+. generate byte baseline=e(sample)
+
+. quietly count if baseline
+
+. local baselineN=r(N)
+
+. 
+. * BEGIN respondent_fe_example
+. reghdfe outcome did `controls' if baseline, ///
+>     absorb(respondent_id year) vce(cluster respondent_id)
+(dropped 3082 singleton observations)
+(MWFE estimator converged in 6 iterations)
+note: gender is probably collinear with the fixed effects (all partialled-out values are close to zero; tol = 1.0e-09)
+note: age is probably collinear with the fixed effects (all partialled-out values are close to zero; tol = 1.0e-09)
+
+HDFE Linear regression                            Number of obs   =     13,579
+Absorbing 2 HDFE groups                           F(  12,   4912) =      10.24
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.5199
+                                                  Adj R-squared   =     0.2463
+                                                  Within R-sq.    =     0.0212
+Number of clusters (respondent_id) =      4,913   Root MSE        =     0.6521
+
+                          (Std. err. adjusted for 4,913 clusters in respondent_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+         outcome | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+             did |  -.0998453   .0373933    -2.67   0.008    -.1731529   -.0265376
+          gender |          0  (omitted)
+           marry |  -.1117503   .0509041    -2.20   0.028    -.2115451   -.0119554
+log_real_inc_per |  -.0230015   .0082714    -2.78   0.005    -.0392172   -.0067858
+           rwork |     .00063   .0234199     0.03   0.979    -.0452836    .0465435
+          rural2 |   .0832623   .0453894     1.83   0.067    -.0057213    .1722458
+             edu |   .0131641   .0231195     0.57   0.569    -.0321605    .0584888
+          hchild |  -.0172074   .0207707    -0.83   0.407    -.0579272    .0235124
+          retire |  -.0537571   .0337995    -1.59   0.112    -.1200192    .0125051
+         adlab_c |   .1033711   .0167021     6.19   0.000     .0706276    .1361147
+          smoken |  -.0114607   .0427701    -0.27   0.789    -.0953092    .0723878
+          drinkl |  -.0155739   .0251378    -0.62   0.536    -.0648552    .0337074
+             srh |  -.0738002   .0109956    -6.71   0.000    -.0953565   -.0522439
+             age |          0  (omitted)
+           _cons |   1.801595   .1177653    15.30   0.000     1.570723    2.032468
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-------------------------------------------------------+
+   Absorbed FE | Categories  - Redundant  = Num. Coefs |
+---------------+---------------------------------------|
+ respondent_id |      4913        4913           0    *|
+          year |         5           1           4     |
+-------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+
+. generate byte respondent_fe_sample=e(sample)
+
+. estimates store policy_fe_individual
+
+. display "p value = " 2*ttail(e(df_r),abs(_b[did]/_se[did]))
+p value = .00760701
+
+. 
+. reghdfe outcome did `controls' if baseline, ///
+>     absorb(respondent_id year) vce(cluster city_id)
+(dropped 3082 singleton observations)
+(MWFE estimator converged in 6 iterations)
+note: gender is probably collinear with the fixed effects (all partialled-out values are close to zero; tol = 1.0e-09)
+note: age is probably collinear with the fixed effects (all partialled-out values are close to zero; tol = 1.0e-09)
+
+HDFE Linear regression                            Number of obs   =     13,579
+Absorbing 2 HDFE groups                           F(  12,     93) =      12.17
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.5199
+                                                  Adj R-squared   =     0.2463
+                                                  Within R-sq.    =     0.0212
+Number of clusters (city_id) =         94         Root MSE        =     0.6521
+
+                                   (Std. err. adjusted for 94 clusters in city_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+         outcome | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+             did |  -.0998453    .046192    -2.16   0.033    -.1915734   -.0081172
+          gender |          0  (omitted)
+           marry |  -.1117503   .0542872    -2.06   0.042    -.2195538   -.0039467
+log_real_inc_per |  -.0230015   .0084912    -2.71   0.008    -.0398633   -.0061397
+           rwork |     .00063   .0224436     0.03   0.978    -.0439385    .0451985
+          rural2 |   .0832623   .0366342     2.27   0.025      .010514    .1560105
+             edu |   .0131641   .0235082     0.56   0.577    -.0335185    .0598468
+          hchild |  -.0172074   .0224912    -0.77   0.446    -.0618704    .0274557
+          retire |  -.0537571   .0335179    -1.60   0.112     -.120317    .0128028
+         adlab_c |   .1033711   .0168808     6.12   0.000     .0698492    .1368931
+          smoken |  -.0114607   .0359692    -0.32   0.751    -.0828885     .059967
+          drinkl |  -.0155739   .0248811    -0.63   0.533    -.0649829     .033835
+             srh |  -.0738002    .010375    -7.11   0.000    -.0944029   -.0531976
+             age |          0  (omitted)
+           _cons |   1.801595   .1211182    14.87   0.000     1.561079    2.042112
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-------------------------------------------------------+
+   Absorbed FE | Categories  - Redundant  = Num. Coefs |
+---------------+---------------------------------------|
+ respondent_id |      4913        4913           0    *|
+          year |         5           1           4     |
+-------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+
+. assert e(sample)==respondent_fe_sample
+
+. estimates store policy_fe_city
+
+. display "p value = " 2*ttail(e(df_r),abs(_b[did]/_se[did]))
+p value = .03322227
+
+. * END respondent_fe_example
+. 
+. estimates table policy_fe_individual policy_fe_city, ///
+>     keep(did) b(%9.6f) se(%9.6f) stats(N)
+
+--------------------------------------
+    Variable | policy_~l   policy_~y  
+-------------+------------------------
+         did | -0.099845   -0.099845  
+             |  0.037393    0.046192  
+-------------+------------------------
+           N |     13579       13579  
+--------------------------------------
+                          Legend: b/se
+
+. display "Completed: both named individual fixed-effects examples."
+Completed: both named individual fixed-effects examples.
+
+. log close feexample
+      name:  feexample
+       log:  <LOCAL_HOME>/Documents/honor thesis/hpr_reproducibility_release_20261103/HealthyCity_Mediation_Reproducibility/runs/full_202611
+> 03_125706_909486/logs/worked_fe_examples.log
+  log type:  text
+ closed on:   3 Nov 2026, 12:57:52
+--------------------------------------------------------------------------------------------------------------------------------------------

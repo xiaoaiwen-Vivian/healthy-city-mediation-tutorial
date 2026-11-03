@@ -1,0 +1,8 @@
+{
+  "revision_reader_unit_tests": 4,
+  "unit_tests_passed": true,
+  "tracked_and_accepted_tables_identical": true,
+  "real_manuscript_numeric_checks": 288,
+  "intentional_numeric_error_detected": true,
+  "original_manuscript_modified": false
+}
