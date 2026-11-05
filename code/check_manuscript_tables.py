@@ -76,8 +76,11 @@ def normalize(value):
 def compare(docx, results):
     tables = extract_tables(docx)
     required = {str(i) for i in range(1, 12)} | {'S1'}
-    if set(tables) != required:
-        raise ValueError(f'Expected Tables 1-11 and S1; found {sorted(tables)}')
+    missing = required - set(tables)
+    unexpected = set(tables) - required - {'S2', 'S3'}
+    if missing or unexpected:
+        raise ValueError(f'Expected Tables 1-11 and S1, with optional S2/S3; '
+                         f'missing {sorted(missing)}, unexpected {sorted(unexpected)}')
     root = Path(results)
     py = root/'python'
     paths = pd.read_csv(py/'component_adjusted.csv')
@@ -189,6 +192,8 @@ def compare(docx, results):
                    displayed_numeric_entries_checked=len(frame),
                    mismatches=int((~frame.Matches_displayed_precision).sum()),
                    table_order=list(tables),
+                   supplemental_tables_checked_separately=sorted(set(tables) & {'S2', 'S3'}),
+                   supplemental_checker='supplementary_reporting/run.py check --manuscript <manuscript.docx>',
                    scope='Numerical entries in Tables 2-5, 7-11 and S1. This is not a prose, citation, code-snippet or page-layout check.')
     return frame, summary
 

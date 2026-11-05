@@ -1,0 +1,5 @@
+Sample,Group,People,Person_waves,Mean_waves,Mean_span_years,Total_span_years,One_wave,All_five_waves
+Eligible observations,Treated,1324,4438,3.35196374622,5.69410876133,7539,207,431
+Eligible observations,Untreated,8894,29790,3.34944906679,5.80200134922,51603,1247,2730
+Primary complete sample,Treated,1029,2135,2.07482993197,3.1749271137,3267,405,40
+Primary complete sample,Untreated,6966,14526,2.08527131783,3.38458225668,23577,2677,236

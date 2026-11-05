@@ -1,0 +1,64 @@
+Variable,Label,Group,N,Mean,SD,Count_1,Percent_1
+outcome,Reduced-activation item score (1–4),All,16661,1.29187923894,0.746242739966,,
+outcome,Reduced-activation item score (1–4),Untreated cities,14526,1.30627839736,0.762384492429,,
+outcome,Reduced-activation item score (1–4),Treated cities,2135,1.19391100703,0.616745715773,,
+did,Policy exposure (treated city × post-policy period),All,16661,0.0789868555309,0.269726340588,1316,7.89868555309
+did,Policy exposure (treated city × post-policy period),Untreated cities,14526,0,0,0,0
+did,Policy exposure (treated city × post-policy period),Treated cities,2135,0.616393442623,0.486377804828,1316,61.6393442623
+gender,Male,All,16661,0.453034031571,0.497804250093,7548,45.3034031571
+gender,Male,Untreated cities,14526,0.453118546055,0.497814412873,6582,45.3118546055
+gender,Male,Treated cities,2135,0.452459016393,0.497851329873,966,45.2459016393
+marry,Married,All,16661,0.844066982774,0.362802717189,14063,84.4066982774
+marry,Married,Untreated cities,14526,0.840837119648,0.365840500278,12214,84.0837119648
+marry,Married,Treated cities,2135,0.866042154567,0.340686814026,1849,86.6042154567
+log_real_inc_per,Log real household income per person,All,16661,9.16005497104,1.42567045078,,
+log_real_inc_per,Log real household income per person,Untreated cities,14526,9.09930095996,1.44354662131,,
+log_real_inc_per,Log real household income per person,Treated cities,2135,9.57340989611,1.21996464455,,
+rwork,Currently working,All,16661,0.457235460056,0.498182788094,7618,45.7235460056
+rwork,Currently working,Untreated cities,14526,0.465165909404,0.498802279763,6757,46.5165909404
+rwork,Currently working,Treated cities,2135,0.403278688525,0.490670719531,861,40.3278688525
+rural2,Agricultural household registration,All,16661,0.481423684053,0.499669796741,8021,48.1423684053
+rural2,Agricultural household registration,Untreated cities,14526,0.482789480931,0.499720911454,7013,48.2789480931
+rural2,Agricultural household registration,Treated cities,2135,0.472131147541,0.499339677976,1008,47.2131147541
+edu,Education score (1–4),All,16661,2.33107256467,1.12218177706,,
+edu,Education score (1–4),Untreated cities,14526,2.31006471155,1.11696258092,,
+edu,Education score (1–4),Treated cities,2135,2.47400468384,1.14716292805,,
+hchild,Number of children,All,16661,2.37794850249,1.3007306627,,
+hchild,Number of children,Untreated cities,14526,2.43838634173,1.31262519674,,
+hchild,Number of children,Treated cities,2135,1.96674473068,1.13449758002,,
+retire,Retired,All,16661,0.362523257908,0.480743192298,6040,36.2523257908
+retire,Retired,Untreated cities,14526,0.346000275368,0.475709642274,5026,34.6000275368
+retire,Retired,Treated cities,2135,0.474941451991,0.499488664347,1014,47.4941451991
+adlab_c,ADL difficulties (0–6),All,16661,0.30112238161,0.858341913822,,
+adlab_c,ADL difficulties (0–6),Untreated cities,14526,0.317224287485,0.882892698418,,
+adlab_c,ADL difficulties (0–6),Treated cities,2135,0.191569086651,0.657538023874,,
+smoken,Currently smoking,All,16661,0.235760158454,0.424485713663,3928,23.5760158454
+smoken,Currently smoking,Untreated cities,14526,0.239570425444,0.426836009451,3480,23.9570425444
+smoken,Currently smoking,Treated cities,2135,0.209836065574,0.407286861955,448,20.9836065574
+drinkl,Currently drinking,All,16661,0.342416421583,0.474532328998,5705,34.2416421583
+drinkl,Currently drinking,Untreated cities,14526,0.341800908715,0.47432956496,4965,34.1800908715
+drinkl,Currently drinking,Treated cities,2135,0.346604215457,0.475999850639,740,34.6604215457
+srh,Self-rated health (1–5),All,16661,3.09645279395,0.942908082407,,
+srh,Self-rated health (1–5),Untreated cities,14526,3.09094038276,0.952751889051,,
+srh,Self-rated health (1–5),Treated cities,2135,3.13395784543,0.872276335641,,
+age,Age (years),All,16661,62.9531840826,9.43857212043,,
+age,Age (years),Untreated cities,14526,62.8040754509,9.45198719185,,
+age,Age (years),Treated cities,2135,63.9676814988,9.28560600735,,
+m_green,Green coverage (%),All,16661,40.7115226877,4.63969359192,,
+m_green,Green coverage (%),Untreated cities,14526,40.6471442035,4.88344311001,,
+m_green,Green coverage (%),Treated cities,2135,41.1495376112,2.34885214027,,
+m_road,Road area per person (m²),All,16661,17.6269225554,6.95071822463,,
+m_road,Road area per person (m²),Untreated cities,14526,17.72452923,6.9584887379,,
+m_road,Road area per person (m²),Treated cities,2135,16.9628314286,6.8624627585,,
+m_so2,Industrial SO2 emissions (tons),All,15430,37321.7134802,56131.6819027,,
+m_so2,Industrial SO2 emissions (tons),Untreated cities,13558,37417.404927,57887.936277,,
+m_so2,Industrial SO2 emissions (tons),Treated cities,1872,36628.6661325,41242.4321785,,
+m_medical,"Hospitals and health centers per 10,000 residents",All,11141,0.422845074378,0.320016608816,,
+m_medical,"Hospitals and health centers per 10,000 residents",Untreated cities,9764,0.421265431629,0.337198064566,,
+m_medical,"Hospitals and health centers per 10,000 residents",Treated cities,1377,0.434045968934,0.14907527034,,
+m_pm25,PM2.5 (μg/m³),All,16661,44.6970166735,18.109987757,,
+m_pm25,PM2.5 (μg/m³),Untreated cities,14526,44.0080468071,17.747431937,,
+m_pm25,PM2.5 (μg/m³),Treated cities,2135,49.3845933845,19.7837504083,,
+m_social,Social participation (0–2),All,16660,0.579651860744,0.686246857065,,
+m_social,Social participation (0–2),Untreated cities,14525,0.577969018933,0.688305252409,,
+m_social,Social participation (0–2),Treated cities,2135,0.591100702576,0.672122250251,,

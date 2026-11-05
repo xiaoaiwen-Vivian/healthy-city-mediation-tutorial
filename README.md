@@ -2,7 +2,7 @@
 
 Companion to **A practical tutorial on mediation analysis with clustered data in health psychology**, by Xiaoai Wen and Chun-Chieh Hu. This repository contains the Stata and Python implementation, shared city resampling schedule, saved bootstrap estimates, and aggregate reference results used in the tutorial. The manuscript preprint DOI is [10.21203/rs.3.rs-11370584/v1](https://doi.org/10.21203/rs.3.rs-11370584/v1); this is not a DOI for the code release.
 
-This update follows the revised manuscript's Tables 1–11 and Supplementary Table S1. Table 8 reports component-path BH adjustments; Tables 9 and 10 contain descriptive bootstrap calculations. See [the change record](CHANGELOG.md) and [executed validation](verification/REPRODUCTION_REPORT.md).
+The main programs follow the revised manuscript's Tables 1–11 and Supplementary Table S1. Table 8 reports component-path BH adjustments; Tables 9 and 10 contain descriptive bootstrap calculations. The [supplementary reporting add-on](supplementary_reporting/README.md) supplies Tables S2 and S3 and the sample-selection, missingness, follow-up, observation-span, and wave-specific outcome summaries. See [the change record](CHANGELOG.md) and [executed validation](verification/REPRODUCTION_REPORT.md) for the main analysis, and the add-on's separate [validation record](supplementary_reporting/verification/RUN_REPORT.md).
 
 ## Start here
 
@@ -36,6 +36,23 @@ On macOS with the installation used for testing, the Stata executable is `/Appli
 Each invocation creates a new `runs/<mode>_<timestamp>/` directory. The input and `reference_results/` are never overwritten. New estimates go into that run's `results/`; execution logs go into `logs/`. Success requires **`REPRODUCTION_CHECK_PASSED`** and a passed verification report, not merely Stata's process exit code. Full estimation must also produce the Python and Stata completion markers.
 
 The runner pins BLAS computational threads to one per process to keep small repeated fits efficient. This affects computational scheduling, not statistical weights or the model.
+
+## Supplementary Tables S2 and S3
+
+Keep the add-on directory named exactly `supplementary_reporting`. It has its own README and entry point; the main runner checks Tables 2–5, 7–11 and S1, while the add-on checks S2 and S3.
+
+```bash
+python -m pip install -r supplementary_reporting/requirements.txt
+python supplementary_reporting/run.py check --manuscript "/path/to/manuscript.docx"
+```
+
+This command regenerates displays from aggregate reference results. To recalculate from authorized study data and independently verify with Stata, use the completed upstream build directory:
+
+```bash
+python supplementary_reporting/run.py full --build-dir "/path/to/runs/build-input_..." --stata "/path/to/stata-mp" --manuscript "/path/to/manuscript.docx"
+```
+
+The add-on README lists the required build outputs and the scope of each check.
 
 ## The common-sample specification
 
