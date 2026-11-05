@@ -1,8 +1,0 @@
-{
-  "passed": true,
-  "checks": 582,
-  "mismatches": 0,
-  "S2_groups_of_descriptives_and_missingness": 63,
-  "S3_models": 26,
-  "all_models_94_cities_10_treated": true
-}
