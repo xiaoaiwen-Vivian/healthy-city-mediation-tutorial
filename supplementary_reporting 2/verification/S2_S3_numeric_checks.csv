@@ -1,0 +1,359 @@
+Table,Row,Column,Reported,Calculated,Tolerance,Matches
+S2,Reduced-activation item (1–4),All/Mean,1.29,1.29187923894,0.00500001,True
+S2,Reduced-activation item (1–4),All/SD,0.75,0.746242739966,0.00500001,True
+S2,Reduced-activation item (1–4),All/Missing,"3,507",3507.0,0.0,True
+S2,Reduced-activation item (1–4),All/Percent_missing,10.2,10.245997429,0.050000100000000006,True
+S2,Reduced-activation item (1–4),Untreated cities/Mean,1.31,1.30627839736,0.00500001,True
+S2,Reduced-activation item (1–4),Untreated cities/SD,0.76,0.762384492429,0.00500001,True
+S2,Reduced-activation item (1–4),Untreated cities/Missing,"3,058",3058.0,0.0,True
+S2,Reduced-activation item (1–4),Untreated cities/Percent_missing,10.3,10.265189661,0.050000100000000006,True
+S2,Reduced-activation item (1–4),Treated cities/Mean,1.19,1.19391100703,0.00500001,True
+S2,Reduced-activation item (1–4),Treated cities/SD,0.62,0.616745715773,0.00500001,True
+S2,Reduced-activation item (1–4),Treated cities/Missing,449,449.0,0.0,True
+S2,Reduced-activation item (1–4),Treated cities/Percent_missing,10.1,10.1171698963,0.050000100000000006,True
+S2,Policy exposure,All/Count_1,"1,316",1316.0,0.0,True
+S2,Policy exposure,All/Percent_1,7.9,7.89868555309,0.050000100000000006,True
+S2,Policy exposure,All/Missing,0,0.0,0.0,True
+S2,Policy exposure,All/Percent_missing,0.0,0.0,0.050000100000000006,True
+S2,Policy exposure,Untreated cities/Count_1,0,0.0,0.0,True
+S2,Policy exposure,Untreated cities/Percent_1,0.0,0.0,0.050000100000000006,True
+S2,Policy exposure,Untreated cities/Missing,0,0.0,0.0,True
+S2,Policy exposure,Untreated cities/Percent_missing,0.0,0.0,0.050000100000000006,True
+S2,Policy exposure,Treated cities/Count_1,"1,316",1316.0,0.0,True
+S2,Policy exposure,Treated cities/Percent_1,61.6,61.6393442623,0.050000100000000006,True
+S2,Policy exposure,Treated cities/Missing,0,0.0,0.0,True
+S2,Policy exposure,Treated cities/Percent_missing,0.0,0.0,0.050000100000000006,True
+S2,Male,All/Count_1,"7,548",7548.0,0.0,True
+S2,Male,All/Percent_1,45.3,45.3034031571,0.050000100000000006,True
+S2,Male,All/Missing,0,0.0,0.0,True
+S2,Male,All/Percent_missing,0.0,0.0,0.050000100000000006,True
+S2,Male,Untreated cities/Count_1,"6,582",6582.0,0.0,True
+S2,Male,Untreated cities/Percent_1,45.3,45.3118546055,0.050000100000000006,True
+S2,Male,Untreated cities/Missing,0,0.0,0.0,True
+S2,Male,Untreated cities/Percent_missing,0.0,0.0,0.050000100000000006,True
+S2,Male,Treated cities/Count_1,966,966.0,0.0,True
+S2,Male,Treated cities/Percent_1,45.2,45.2459016393,0.050000100000000006,True
+S2,Male,Treated cities/Missing,0,0.0,0.0,True
+S2,Male,Treated cities/Percent_missing,0.0,0.0,0.050000100000000006,True
+S2,Married,All/Count_1,"14,063",14063.0,0.0,True
+S2,Married,All/Percent_1,84.4,84.4066982774,0.050000100000000006,True
+S2,Married,All/Missing,5,5.0,0.0,True
+S2,Married,All/Percent_missing,0.0,0.0146079233376,0.050000100000000006,True
+S2,Married,Untreated cities/Count_1,"12,214",12214.0,0.0,True
+S2,Married,Untreated cities/Percent_1,84.1,84.0837119648,0.050000100000000006,True
+S2,Married,Untreated cities/Missing,5,5.0,0.0,True
+S2,Married,Untreated cities/Percent_missing,0.0,0.016784155757,0.050000100000000006,True
+S2,Married,Treated cities/Count_1,"1,849",1849.0,0.0,True
+S2,Married,Treated cities/Percent_1,86.6,86.6042154567,0.050000100000000006,True
+S2,Married,Treated cities/Missing,0,0.0,0.0,True
+S2,Married,Treated cities/Percent_missing,0.0,0.0,0.050000100000000006,True
+S2,Log real household income per person,All/Mean,9.16,9.16005497104,0.00500001,True
+S2,Log real household income per person,All/SD,1.43,1.42567045078,0.00500001,True
+S2,Log real household income per person,All/Missing,"14,469",14469.0,0.0,True
+S2,Log real household income per person,All/Percent_missing,42.3,42.2724085544,0.050000100000000006,True
+S2,Log real household income per person,Untreated cities/Mean,9.10,9.09930095996,0.00500001,True
+S2,Log real household income per person,Untreated cities/SD,1.44,1.44354662131,0.00500001,True
+S2,Log real household income per person,Untreated cities/Missing,"12,561",12561.0,0.0,True
+S2,Log real household income per person,Untreated cities/Percent_missing,42.2,42.1651560926,0.050000100000000006,True
+S2,Log real household income per person,Treated cities/Mean,9.57,9.57340989611,0.00500001,True
+S2,Log real household income per person,Treated cities/SD,1.22,1.21996464455,0.00500001,True
+S2,Log real household income per person,Treated cities/Missing,"1,908",1908.0,0.0,True
+S2,Log real household income per person,Treated cities/Percent_missing,43.0,42.9923388914,0.050000100000000006,True
+S2,Currently working,All/Count_1,"7,618",7618.0,0.0,True
+S2,Currently working,All/Percent_1,45.7,45.7235460056,0.050000100000000006,True
+S2,Currently working,All/Missing,0,0.0,0.0,True
+S2,Currently working,All/Percent_missing,0.0,0.0,0.050000100000000006,True
+S2,Currently working,Untreated cities/Count_1,"6,757",6757.0,0.0,True
+S2,Currently working,Untreated cities/Percent_1,46.5,46.5165909404,0.050000100000000006,True
+S2,Currently working,Untreated cities/Missing,0,0.0,0.0,True
+S2,Currently working,Untreated cities/Percent_missing,0.0,0.0,0.050000100000000006,True
+S2,Currently working,Treated cities/Count_1,861,861.0,0.0,True
+S2,Currently working,Treated cities/Percent_1,40.3,40.3278688525,0.050000100000000006,True
+S2,Currently working,Treated cities/Missing,0,0.0,0.0,True
+S2,Currently working,Treated cities/Percent_missing,0.0,0.0,0.050000100000000006,True
+S2,Agricultural household registration,All/Count_1,"8,021",8021.0,0.0,True
+S2,Agricultural household registration,All/Percent_1,48.1,48.1423684053,0.050000100000000006,True
+S2,Agricultural household registration,All/Missing,"1,513",1513.0,0.0,True
+S2,Agricultural household registration,All/Percent_missing,4.4,4.42035760196,0.050000100000000006,True
+S2,Agricultural household registration,Untreated cities/Count_1,"7,013",7013.0,0.0,True
+S2,Agricultural household registration,Untreated cities/Percent_1,48.3,48.2789480931,0.050000100000000006,True
+S2,Agricultural household registration,Untreated cities/Missing,"1,343",1343.0,0.0,True
+S2,Agricultural household registration,Untreated cities/Percent_missing,4.5,4.50822423632,0.050000100000000006,True
+S2,Agricultural household registration,Treated cities/Count_1,"1,008",1008.0,0.0,True
+S2,Agricultural household registration,Treated cities/Percent_1,47.2,47.2131147541,0.050000100000000006,True
+S2,Agricultural household registration,Treated cities/Missing,170,170.0,0.0,True
+S2,Agricultural household registration,Treated cities/Percent_missing,3.8,3.83055430374,0.050000100000000006,True
+S2,Education score (1–4),All/Mean,2.33,2.33107256467,0.00500001,True
+S2,Education score (1–4),All/SD,1.12,1.12218177706,0.00500001,True
+S2,Education score (1–4),All/Missing,30,30.0,0.0,True
+S2,Education score (1–4),All/Percent_missing,0.1,0.0876475400257,0.050000100000000006,True
+S2,Education score (1–4),Untreated cities/Mean,2.31,2.31006471155,0.00500001,True
+S2,Education score (1–4),Untreated cities/SD,1.12,1.11696258092,0.00500001,True
+S2,Education score (1–4),Untreated cities/Missing,27,27.0,0.0,True
+S2,Education score (1–4),Untreated cities/Percent_missing,0.1,0.0906344410876,0.050000100000000006,True
+S2,Education score (1–4),Treated cities/Mean,2.47,2.47400468384,0.00500001,True
+S2,Education score (1–4),Treated cities/SD,1.15,1.14716292805,0.00500001,True
+S2,Education score (1–4),Treated cities/Missing,3,3.0,0.0,True
+S2,Education score (1–4),Treated cities/Percent_missing,0.1,0.0675980171248,0.050000100000000006,True
+S2,Number of children,All/Mean,2.38,2.37794850249,0.00500001,True
+S2,Number of children,All/SD,1.30,1.3007306627,0.00500001,True
+S2,Number of children,All/Missing,0,0.0,0.0,True
+S2,Number of children,All/Percent_missing,0.0,0.0,0.050000100000000006,True
+S2,Number of children,Untreated cities/Mean,2.44,2.43838634173,0.00500001,True
+S2,Number of children,Untreated cities/SD,1.31,1.31262519674,0.00500001,True
+S2,Number of children,Untreated cities/Missing,0,0.0,0.0,True
+S2,Number of children,Untreated cities/Percent_missing,0.0,0.0,0.050000100000000006,True
+S2,Number of children,Treated cities/Mean,1.97,1.96674473068,0.00500001,True
+S2,Number of children,Treated cities/SD,1.13,1.13449758002,0.00500001,True
+S2,Number of children,Treated cities/Missing,0,0.0,0.0,True
+S2,Number of children,Treated cities/Percent_missing,0.0,0.0,0.050000100000000006,True
+S2,Retired,All/Count_1,"6,040",6040.0,0.0,True
+S2,Retired,All/Percent_1,36.3,36.2523257908,0.050000100000000006,True
+S2,Retired,All/Missing,409,409.0,0.0,True
+S2,Retired,All/Percent_missing,1.2,1.19492812902,0.050000100000000006,True
+S2,Retired,Untreated cities/Count_1,"5,026",5026.0,0.0,True
+S2,Retired,Untreated cities/Percent_1,34.6,34.6000275368,0.050000100000000006,True
+S2,Retired,Untreated cities/Missing,353,353.0,0.0,True
+S2,Retired,Untreated cities/Percent_missing,1.2,1.18496139644,0.050000100000000006,True
+S2,Retired,Treated cities/Count_1,"1,014",1014.0,0.0,True
+S2,Retired,Treated cities/Percent_1,47.5,47.4941451991,0.050000100000000006,True
+S2,Retired,Treated cities/Missing,56,56.0,0.0,True
+S2,Retired,Treated cities/Percent_missing,1.3,1.261829653,0.050000100000000006,True
+S2,ADL difficulties (0–6),All/Mean,0.30,0.30112238161,0.00500001,True
+S2,ADL difficulties (0–6),All/SD,0.86,0.858341913822,0.00500001,True
+S2,ADL difficulties (0–6),All/Missing,484,484.0,0.0,True
+S2,ADL difficulties (0–6),All/Percent_missing,1.4,1.41404697908,0.050000100000000006,True
+S2,ADL difficulties (0–6),Untreated cities/Mean,0.32,0.317224287485,0.00500001,True
+S2,ADL difficulties (0–6),Untreated cities/SD,0.88,0.882892698418,0.00500001,True
+S2,ADL difficulties (0–6),Untreated cities/Missing,414,414.0,0.0,True
+S2,ADL difficulties (0–6),Untreated cities/Percent_missing,1.4,1.38972809668,0.050000100000000006,True
+S2,ADL difficulties (0–6),Treated cities/Mean,0.19,0.191569086651,0.00500001,True
+S2,ADL difficulties (0–6),Treated cities/SD,0.66,0.657538023874,0.00500001,True
+S2,ADL difficulties (0–6),Treated cities/Missing,70,70.0,0.0,True
+S2,ADL difficulties (0–6),Treated cities/Percent_missing,1.6,1.57728706625,0.050000100000000006,True
+S2,Currently smoking,All/Count_1,"3,928",3928.0,0.0,True
+S2,Currently smoking,All/Percent_1,23.6,23.5760158454,0.050000100000000006,True
+S2,Currently smoking,All/Missing,"1,431",1431.0,0.0,True
+S2,Currently smoking,All/Percent_missing,4.2,4.18078765923,0.050000100000000006,True
+S2,Currently smoking,Untreated cities/Count_1,"3,480",3480.0,0.0,True
+S2,Currently smoking,Untreated cities/Percent_1,24.0,23.9570425444,0.050000100000000006,True
+S2,Currently smoking,Untreated cities/Missing,"1,254",1254.0,0.0,True
+S2,Currently smoking,Untreated cities/Percent_missing,4.2,4.20946626385,0.050000100000000006,True
+S2,Currently smoking,Treated cities/Count_1,448,448.0,0.0,True
+S2,Currently smoking,Treated cities/Percent_1,21.0,20.9836065574,0.050000100000000006,True
+S2,Currently smoking,Treated cities/Missing,177,177.0,0.0,True
+S2,Currently smoking,Treated cities/Percent_missing,4.0,3.98828301037,0.050000100000000006,True
+S2,Currently drinking,All/Count_1,"5,705",5705.0,0.0,True
+S2,Currently drinking,All/Percent_1,34.2,34.2416421583,0.050000100000000006,True
+S2,Currently drinking,All/Missing,53,53.0,0.0,True
+S2,Currently drinking,All/Percent_missing,0.2,0.154843987379,0.050000100000000006,True
+S2,Currently drinking,Untreated cities/Count_1,"4,965",4965.0,0.0,True
+S2,Currently drinking,Untreated cities/Percent_1,34.2,34.1800908715,0.050000100000000006,True
+S2,Currently drinking,Untreated cities/Missing,42,42.0,0.0,True
+S2,Currently drinking,Untreated cities/Percent_missing,0.1,0.140986908359,0.050000100000000006,True
+S2,Currently drinking,Treated cities/Count_1,740,740.0,0.0,True
+S2,Currently drinking,Treated cities/Percent_1,34.7,34.6604215457,0.050000100000000006,True
+S2,Currently drinking,Treated cities/Missing,11,11.0,0.0,True
+S2,Currently drinking,Treated cities/Percent_missing,0.2,0.247859396124,0.050000100000000006,True
+S2,Self-rated health (1–5),All/Mean,3.10,3.09645279395,0.00500001,True
+S2,Self-rated health (1–5),All/SD,0.94,0.942908082407,0.00500001,True
+S2,Self-rated health (1–5),All/Missing,"2,261",2261.0,0.0,True
+S2,Self-rated health (1–5),All/Percent_missing,6.6,6.60570293327,0.050000100000000006,True
+S2,Self-rated health (1–5),Untreated cities/Mean,3.09,3.09094038276,0.00500001,True
+S2,Self-rated health (1–5),Untreated cities/SD,0.95,0.952751889051,0.00500001,True
+S2,Self-rated health (1–5),Untreated cities/Missing,"1,950",1950.0,0.0,True
+S2,Self-rated health (1–5),Untreated cities/Percent_missing,6.5,6.54582074522,0.050000100000000006,True
+S2,Self-rated health (1–5),Treated cities/Mean,3.13,3.13395784543,0.00500001,True
+S2,Self-rated health (1–5),Treated cities/SD,0.87,0.872276335641,0.00500001,True
+S2,Self-rated health (1–5),Treated cities/Missing,311,311.0,0.0,True
+S2,Self-rated health (1–5),Treated cities/Percent_missing,7.0,7.00766110861,0.050000100000000006,True
+S2,Age (years),All/Mean,62.95,62.9531840826,0.00500001,True
+S2,Age (years),All/SD,9.44,9.43857212043,0.00500001,True
+S2,Age (years),All/Missing,0,0.0,0.0,True
+S2,Age (years),All/Percent_missing,0.0,0.0,0.050000100000000006,True
+S2,Age (years),Untreated cities/Mean,62.80,62.8040754509,0.00500001,True
+S2,Age (years),Untreated cities/SD,9.45,9.45198719185,0.00500001,True
+S2,Age (years),Untreated cities/Missing,0,0.0,0.0,True
+S2,Age (years),Untreated cities/Percent_missing,0.0,0.0,0.050000100000000006,True
+S2,Age (years),Treated cities/Mean,63.97,63.9676814988,0.00500001,True
+S2,Age (years),Treated cities/SD,9.29,9.28560600735,0.00500001,True
+S2,Age (years),Treated cities/Missing,0,0.0,0.0,True
+S2,Age (years),Treated cities/Percent_missing,0.0,0.0,0.050000100000000006,True
+S2,Green coverage (%),All/Mean,40.71,40.7115226877,0.00500001,True
+S2,Green coverage (%),All/SD,4.64,4.63969359192,0.00500001,True
+S2,Green coverage (%),All/Missing,0,0.0,0.0,True
+S2,Green coverage (%),All/Percent_missing,0.0,0.0,0.050000100000000006,True
+S2,Green coverage (%),Untreated cities/Mean,40.65,40.6471442035,0.00500001,True
+S2,Green coverage (%),Untreated cities/SD,4.88,4.88344311001,0.00500001,True
+S2,Green coverage (%),Untreated cities/Missing,0,0.0,0.0,True
+S2,Green coverage (%),Untreated cities/Percent_missing,0.0,0.0,0.050000100000000006,True
+S2,Green coverage (%),Treated cities/Mean,41.15,41.1495376112,0.00500001,True
+S2,Green coverage (%),Treated cities/SD,2.35,2.34885214027,0.00500001,True
+S2,Green coverage (%),Treated cities/Missing,0,0.0,0.0,True
+S2,Green coverage (%),Treated cities/Percent_missing,0.0,0.0,0.050000100000000006,True
+S2,Road area per person (m²),All/Mean,17.63,17.6269225554,0.00500001,True
+S2,Road area per person (m²),All/SD,6.95,6.95071822463,0.00500001,True
+S2,Road area per person (m²),All/Missing,0,0.0,0.0,True
+S2,Road area per person (m²),All/Percent_missing,0.0,0.0,0.050000100000000006,True
+S2,Road area per person (m²),Untreated cities/Mean,17.72,17.72452923,0.00500001,True
+S2,Road area per person (m²),Untreated cities/SD,6.96,6.9584887379,0.00500001,True
+S2,Road area per person (m²),Untreated cities/Missing,0,0.0,0.0,True
+S2,Road area per person (m²),Untreated cities/Percent_missing,0.0,0.0,0.050000100000000006,True
+S2,Road area per person (m²),Treated cities/Mean,16.96,16.9628314286,0.00500001,True
+S2,Road area per person (m²),Treated cities/SD,6.86,6.8624627585,0.00500001,True
+S2,Road area per person (m²),Treated cities/Missing,0,0.0,0.0,True
+S2,Road area per person (m²),Treated cities/Percent_missing,0.0,0.0,0.050000100000000006,True
+S2,Industrial SO2 emissions (tons),All/Mean,"37,322",37321.7134802,0.500001,True
+S2,Industrial SO2 emissions (tons),All/SD,"56,132",56131.6819027,0.500001,True
+S2,Industrial SO2 emissions (tons),All/Missing,"1,806",1806.0,0.0,True
+S2,Industrial SO2 emissions (tons),All/Percent_missing,5.3,5.27638190955,0.050000100000000006,True
+S2,Industrial SO2 emissions (tons),Untreated cities/Mean,"37,417",37417.404927,0.500001,True
+S2,Industrial SO2 emissions (tons),Untreated cities/SD,"57,888",57887.936277,0.500001,True
+S2,Industrial SO2 emissions (tons),Untreated cities/Missing,"1,463",1463.0,0.0,True
+S2,Industrial SO2 emissions (tons),Untreated cities/Percent_missing,4.9,4.91104397449,0.050000100000000006,True
+S2,Industrial SO2 emissions (tons),Treated cities/Mean,"36,629",36628.6661325,0.500001,True
+S2,Industrial SO2 emissions (tons),Treated cities/SD,"41,242",41242.4321785,0.500001,True
+S2,Industrial SO2 emissions (tons),Treated cities/Missing,343,343.0,0.0,True
+S2,Industrial SO2 emissions (tons),Treated cities/Percent_missing,7.7,7.72870662461,0.050000100000000006,True
+S2,"Medical (facilities/10,000 residents)",All/Mean,0.42,0.422845074378,0.00500001,True
+S2,"Medical (facilities/10,000 residents)",All/SD,0.32,0.320016608816,0.00500001,True
+S2,"Medical (facilities/10,000 residents)",All/Missing,"7,166",7166.0,0.0,True
+S2,"Medical (facilities/10,000 residents)",All/Percent_missing,20.9,20.9360757275,0.050000100000000006,True
+S2,"Medical (facilities/10,000 residents)",Untreated cities/Mean,0.42,0.421265431629,0.00500001,True
+S2,"Medical (facilities/10,000 residents)",Untreated cities/SD,0.34,0.337198064566,0.00500001,True
+S2,"Medical (facilities/10,000 residents)",Untreated cities/Missing,"6,199",6199.0,0.0,True
+S2,"Medical (facilities/10,000 residents)",Untreated cities/Percent_missing,20.8,20.8089963075,0.050000100000000006,True
+S2,"Medical (facilities/10,000 residents)",Treated cities/Mean,0.43,0.434045968934,0.00500001,True
+S2,"Medical (facilities/10,000 residents)",Treated cities/SD,0.15,0.14907527034,0.00500001,True
+S2,"Medical (facilities/10,000 residents)",Treated cities/Missing,967,967.0,0.0,True
+S2,"Medical (facilities/10,000 residents)",Treated cities/Percent_missing,21.8,21.7890941866,0.050000100000000006,True
+S2,PM2.5 (μg/m³),All/Mean,44.70,44.6970166735,0.00500001,True
+S2,PM2.5 (μg/m³),All/SD,18.11,18.109987757,0.00500001,True
+S2,PM2.5 (μg/m³),All/Missing,0,0.0,0.0,True
+S2,PM2.5 (μg/m³),All/Percent_missing,0.0,0.0,0.050000100000000006,True
+S2,PM2.5 (μg/m³),Untreated cities/Mean,44.01,44.0080468071,0.00500001,True
+S2,PM2.5 (μg/m³),Untreated cities/SD,17.75,17.747431937,0.00500001,True
+S2,PM2.5 (μg/m³),Untreated cities/Missing,0,0.0,0.0,True
+S2,PM2.5 (μg/m³),Untreated cities/Percent_missing,0.0,0.0,0.050000100000000006,True
+S2,PM2.5 (μg/m³),Treated cities/Mean,49.38,49.3845933845,0.00500001,True
+S2,PM2.5 (μg/m³),Treated cities/SD,19.78,19.7837504083,0.00500001,True
+S2,PM2.5 (μg/m³),Treated cities/Missing,0,0.0,0.0,True
+S2,PM2.5 (μg/m³),Treated cities/Percent_missing,0.0,0.0,0.050000100000000006,True
+S2,Social participation (0–2),All/Mean,0.58,0.579651860744,0.00500001,True
+S2,Social participation (0–2),All/SD,0.69,0.686246857065,0.00500001,True
+S2,Social participation (0–2),All/Missing,452,452.0,0.0,True
+S2,Social participation (0–2),All/Percent_missing,1.3,1.32055626972,0.050000100000000006,True
+S2,Social participation (0–2),Untreated cities/Mean,0.58,0.577969018933,0.00500001,True
+S2,Social participation (0–2),Untreated cities/SD,0.69,0.688305252409,0.00500001,True
+S2,Social participation (0–2),Untreated cities/Missing,411,411.0,0.0,True
+S2,Social participation (0–2),Untreated cities/Percent_missing,1.4,1.37965760322,0.050000100000000006,True
+S2,Social participation (0–2),Treated cities/Mean,0.59,0.591100702576,0.00500001,True
+S2,Social participation (0–2),Treated cities/SD,0.67,0.672122250251,0.00500001,True
+S2,Social participation (0–2),Treated cities/Missing,41,41.0,0.0,True
+S2,Social participation (0–2),Treated cities/Percent_missing,0.9,0.923839567373,0.050000100000000006,True
+S2,Header,All/Descriptive denominator,"16,661",16661.0,0.0,True
+S2,Header,All/Missingness denominator,"34,228",34228.0,0.0,True
+S2,Header,Untreated cities/Descriptive denominator,"14,526",14526.0,0.0,True
+S2,Header,Untreated cities/Missingness denominator,"29,790",29790.0,0.0,True
+S2,Header,Treated cities/Descriptive denominator,"2,135",2135.0,0.0,True
+S2,Header,Treated cities/Missingness denominator,"4,438",4438.0,0.0,True
+S2,Available n: SO2,All,"15,430",15430.0,0.0,True
+S2,Available n: SO2,Untreated cities,"13,558",13558.0,0.0,True
+S2,Available n: SO2,Treated cities,"1,872",1872.0,0.0,True
+S2,Available n: Medical,All,"11,141",11141.0,0.0,True
+S2,Available n: Medical,Untreated cities,"9,764",9764.0,0.0,True
+S2,Available n: Medical,Treated cities,"1,377",1377.0,0.0,True
+S2,Available n: Social,All,"16,660",16660.0,0.0,True
+S2,Available n: Social,Untreated cities,"14,525",14525.0,0.0,True
+S2,Available n: Social,Treated cities,"2,135",2135.0,0.0,True
+S3,Overall policy (c),N,"16,661",16661.0,0.0,True
+S3,Overall policy (c),Crude/estimate,-0.118900,-0.11889995157,5.00001e-07,True
+S3,Overall policy (c),Crude/lower,-0.171408,-0.1714075772,5.00001e-07,True
+S3,Overall policy (c),Crude/upper,-0.066392,-0.0663923259392,5.00001e-07,True
+S3,Overall policy (c),Adjusted/estimate,-0.086679,-0.0866794779116,5.00001e-07,True
+S3,Overall policy (c),Adjusted/lower,-0.152301,-0.152301020422,5.00001e-07,True
+S3,Overall policy (c),Adjusted/upper,-0.021058,-0.0210579354015,5.00001e-07,True
+S3,Green (a),N,"16,661",16661.0,0.0,True
+S3,Green (a),Crude/estimate,1.496798,1.49679799216,5.00001e-07,True
+S3,Green (a),Crude/lower,0.220642,0.220642221898,5.00001e-07,True
+S3,Green (a),Crude/upper,2.772954,2.77295376242,5.00001e-07,True
+S3,Green (a),Adjusted/estimate,0.378438,0.378437668988,5.00001e-07,True
+S3,Green (a),Adjusted/lower,-0.809491,-0.80949146186,5.00001e-07,True
+S3,Green (a),Adjusted/upper,1.566367,1.56636679984,5.00001e-07,True
+S3,Green (b),N,"16,661",16661.0,0.0,True
+S3,Green (b),Crude/estimate,-0.008003,-0.00800293368841,5.00001e-07,True
+S3,Green (b),Crude/lower,-0.015578,-0.0155784583022,5.00001e-07,True
+S3,Green (b),Crude/upper,-0.000427,-0.000427409074654,5.00001e-07,True
+S3,Green (b),Adjusted/estimate,-0.007406,-0.00740591259908,5.00001e-07,True
+S3,Green (b),Adjusted/lower,-0.014332,-0.0143324219695,5.00001e-07,True
+S3,Green (b),Adjusted/upper,-0.000479,-0.000479403228684,5.00001e-07,True
+S3,Road (a),N,"16,661",16661.0,0.0,True
+S3,Road (a),Crude/estimate,-0.274629,-0.274628998092,5.00001e-07,True
+S3,Road (a),Crude/lower,-4.178262,-4.17826195322,5.00001e-07,True
+S3,Road (a),Crude/upper,3.629004,3.62900395704,5.00001e-07,True
+S3,Road (a),Adjusted/estimate,-2.305227,-2.30522668122,5.00001e-07,True
+S3,Road (a),Adjusted/lower,-4.337395,-4.33739476245,5.00001e-07,True
+S3,Road (a),Adjusted/upper,-0.273059,-0.273058599979,5.00001e-07,True
+S3,Road (b),N,"16,661",16661.0,0.0,True
+S3,Road (b),Crude/estimate,0.003026,0.00302604394072,5.00001e-07,True
+S3,Road (b),Crude/lower,-0.000628,-0.000627641030481,5.00001e-07,True
+S3,Road (b),Crude/upper,0.006680,0.00667972891191,5.00001e-07,True
+S3,Road (b),Adjusted/estimate,-0.000214,-0.00021414472414,5.00001e-07,True
+S3,Road (b),Adjusted/lower,-0.005498,-0.00549843690305,5.00001e-07,True
+S3,Road (b),Adjusted/upper,0.005070,0.00507014745477,5.00001e-07,True
+S3,SO2 (a),N,"15,430",15430.0,0.0,True
+S3,SO2 (a),Crude/estimate,"-30,164.255132",-30164.2551316,5.00001e-07,True
+S3,SO2 (a),Crude/lower,"-39,218.300997",-39218.300997,5.00001e-07,True
+S3,SO2 (a),Crude/upper,"-21,110.209266",-21110.2092662,5.00001e-07,True
+S3,SO2 (a),Adjusted/estimate,"-8,292.462473",-8292.46247305,5.00001e-07,True
+S3,SO2 (a),Adjusted/lower,"-38,486.965391",-38486.9653908,5.00001e-07,True
+S3,SO2 (a),Adjusted/upper,"21,902.040445",21902.0404447,5.00001e-07,True
+S3,SO2 (b),N,"15,430",15430.0,0.0,True
+S3,SO2 (b),Crude/estimate,-5.328e-07,-5.32844051805e-07,5.000010000000001e-11,True
+S3,SO2 (b),Crude/lower,-8.013e-07,-8.0131495759e-07,5.000010000000001e-11,True
+S3,SO2 (b),Crude/upper,-2.644e-07,-2.6437314602e-07,5.000010000000001e-11,True
+S3,SO2 (b),Adjusted/estimate,-1.795e-07,-1.79492198152e-07,5.000010000000001e-11,True
+S3,SO2 (b),Adjusted/lower,-5.436e-07,-5.43577786579e-07,5.000010000000001e-11,True
+S3,SO2 (b),Adjusted/upper,1.846e-07,1.84593390275e-07,5.000010000000001e-11,True
+S3,Medical (a),N,"11,141",11141.0,0.0,True
+S3,Medical (a),Crude/estimate,-0.064363,-0.0643628689353,5.00001e-07,True
+S3,Medical (a),Crude/lower,-0.186563,-0.18656253073,5.00001e-07,True
+S3,Medical (a),Crude/upper,0.057837,0.0578367928595,5.00001e-07,True
+S3,Medical (a),Adjusted/estimate,0.145363,0.145362510736,5.00001e-07,True
+S3,Medical (a),Adjusted/lower,0.012812,0.0128115654012,5.00001e-07,True
+S3,Medical (a),Adjusted/upper,0.277913,0.277913456072,5.00001e-07,True
+S3,Medical (b),N,"11,141",11141.0,0.0,True
+S3,Medical (b),Crude/estimate,0.064377,0.064377390592,5.00001e-07,True
+S3,Medical (b),Crude/lower,-0.029983,-0.0299827015401,5.00001e-07,True
+S3,Medical (b),Crude/upper,0.158737,0.158737482724,5.00001e-07,True
+S3,Medical (b),Adjusted/estimate,-0.017084,-0.0170840223865,5.00001e-07,True
+S3,Medical (b),Adjusted/lower,-0.108670,-0.108669957828,5.00001e-07,True
+S3,Medical (b),Adjusted/upper,0.074502,0.0745019130554,5.00001e-07,True
+S3,PM25 (a),N,"16,661",16661.0,0.0,True
+S3,PM25 (a),Crude/estimate,-6.588301,-6.58830117537,5.00001e-07,True
+S3,PM25 (a),Crude/lower,-13.566732,-13.5667319066,5.00001e-07,True
+S3,PM25 (a),Crude/upper,0.390130,0.390129555827,5.00001e-07,True
+S3,PM25 (a),Adjusted/estimate,-4.850085,-4.85008452195,5.00001e-07,True
+S3,PM25 (a),Adjusted/lower,-10.420306,-10.4203060082,5.00001e-07,True
+S3,PM25 (a),Adjusted/upper,0.720137,0.720136964278,5.00001e-07,True
+S3,PM25 (b),N,"16,661",16661.0,0.0,True
+S3,PM25 (b),Crude/estimate,-0.002103,-0.00210323190931,5.00001e-07,True
+S3,PM25 (b),Crude/lower,-0.003369,-0.00336886078479,5.00001e-07,True
+S3,PM25 (b),Crude/upper,-0.000838,-0.000837603033826,5.00001e-07,True
+S3,PM25 (b),Adjusted/estimate,-0.000901,-0.000900751148233,5.00001e-07,True
+S3,PM25 (b),Adjusted/lower,-0.003629,-0.00362932473532,5.00001e-07,True
+S3,PM25 (b),Adjusted/upper,0.001828,0.00182782243885,5.00001e-07,True
+S3,Social (a),N,"16,660",16660.0,0.0,True
+S3,Social (a),Crude/estimate,0.019948,0.0199481951501,5.00001e-07,True
+S3,Social (a),Crude/lower,-0.055174,-0.0551741305942,5.00001e-07,True
+S3,Social (a),Crude/upper,0.095071,0.0950705208943,5.00001e-07,True
+S3,Social (a),Adjusted/estimate,0.062869,0.0628688794914,5.00001e-07,True
+S3,Social (a),Adjusted/lower,0.006877,0.00687748197919,5.00001e-07,True
+S3,Social (a),Adjusted/upper,0.118860,0.118860277004,5.00001e-07,True
+S3,Social (b),N,"16,660",16660.0,0.0,True
+S3,Social (b),Crude/estimate,-0.089737,-0.0897371479073,5.00001e-07,True
+S3,Social (b),Crude/lower,-0.108935,-0.108934822836,5.00001e-07,True
+S3,Social (b),Crude/upper,-0.070539,-0.0705394729788,5.00001e-07,True
+S3,Social (b),Adjusted/estimate,-0.041043,-0.0410426571615,5.00001e-07,True
+S3,Social (b),Adjusted/lower,-0.058864,-0.0588640923246,5.00001e-07,True
+S3,Social (b),Adjusted/upper,-0.023221,-0.0232212219984,5.00001e-07,True

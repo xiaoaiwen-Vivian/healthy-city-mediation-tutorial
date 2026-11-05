@@ -1,0 +1,121 @@
+PROGRAM: check_manuscript.py
+{
+  "passed": true,
+  "numeric_entries": 358,
+  "S2_entries": 267,
+  "S3_entries": 91,
+  "mismatches": 0
+}
+
+
+PROGRAM: compute_sample_flow.py
+                                                      Stage  All_rows  All_people  Treated_rows  Treated_people  Untreated_rows  Untreated_people
+Observed survey interviews in the assembled five-wave panel     96628       25873          8966            2413           87662             23460
+            Interview year in the five selected study years     96244       25815          8884            2390           87360             23425
+                                  City identifier available     96244       25815          8884            2390           87360             23425
+              City-year matched to the statistical yearbook     87910       23523          8884            2390           79026             21133
+                                       Work status observed     86314       23226          8696            2363           77618             20863
+             Nonresponse outcome codes 997 and 999 excluded     85973       23221          8659            2362           77314             20859
+                      City-year matched to the PM2.5 source     85386       23064          8659            2362           76727             20702
+                                      Age at least 45 years     83168       22687          8442            2336           74726             20351
+                     Urban residence: eligible observations     34228       10218          4438            1324           29790              8894
+  Outcome, policy and all controls observed: primary sample     16661        7995          2135            1029           14526              6966
+
+INITIAL 2011 COHORT
+ Year  Treated_cohort  Treated_interviewed  Treated_eligible  Treated_complete  Untreated_cohort  Untreated_interviewed  Untreated_eligible  Untreated_complete
+ 2011             709                  709               709               280              5351                   5351                5351                2465
+ 2013             709                  604               601               221              5351                   4379                4295                1514
+ 2015             709                  580               576               201              5351                   4051                4004                1326
+ 2018             709                  545               544               370              5351                   3749                3725                2445
+ 2020             709                  531               522               409              5351                   3624                3555                2736
+
+WAVES AND OBSERVED SPAN
+                 Sample     Group  People  Person_waves  Mean_waves  Mean_span_years  Total_span_years  One_wave  All_five_waves
+  Eligible observations   Treated    1324          4438    3.351964         5.694109            7539.0       207             431
+  Eligible observations Untreated    8894         29790    3.349449         5.802001           51603.0      1247            2730
+Primary complete sample   Treated    1029          2135    2.074830         3.174927            3267.0       405              40
+Primary complete sample Untreated    6966         14526    2.085271         3.384582           23577.0      2677             236
+
+{
+  "regressions_run": 0,
+  "bootstrap_runs": 0,
+  "source_unchanged": true,
+  "source_sha256": "a593363c47f3880b996800d45d1ab53647fd72be2fdcd894bcc371b4930d81af",
+  "all_group_counts_sum_to_previous_totals": true,
+  "eligible_and_complete_record_sets_match_original_analysis": true,
+  "treatment_group_constant_within_person": true,
+  "initial_cohort_definition": "Eligible respondents in 2011, classified by eventual city policy status",
+  "interview_count_definition": "Presence in the nominal survey wave, including late interview years",
+  "span_definition": "Last minus first complete-observation year; zero for one-wave respondents; not continuously observed person-time",
+  "missing_visit_reasons": "Not inferred from absence"
+}
+
+
+PROGRAM: compute_tables.py
+{
+  "eligible_rows": 34228,
+  "eligible_people": 10218,
+  "baseline_rows": 16661,
+  "baseline_people": 7995,
+  "age_mean": 62.95318408258808,
+  "age_sd": 9.438572120428711,
+  "male_percent": 45.303403157073404,
+  "outcome_mean": 1.2918792389412401,
+  "outcome_sd": 0.7462427399663638,
+  "baseline_treated_rows": 2135,
+  "baseline_untreated_rows": 14526,
+  "baseline_treated_people": 1029,
+  "baseline_untreated_people": 6966,
+  "source_sha256": "a593363c47f3880b996800d45d1ab53647fd72be2fdcd894bcc371b4930d81af",
+  "rows_removed_complete": 17567
+}
+                 Sample  Respondents  Mean_waves  Median_waves  Mean_span_years  Median_span_years  Span_q1  Span_q3
+  Eligible observations        10218    3.349775           3.0         5.788021                7.0      2.0      9.0
+Primary complete sample         7995    2.083927           2.0         3.357598                2.0      0.0      7.0
+ Year  Eligible_person_waves  Eligible_untreated  Eligible_treated  Complete_person_waves  Complete_untreated  Complete_treated  Initial_2011_eligible_cohort  Initial_cohort_interviewed  Initial_cohort_eligible  Initial_cohort_complete
+ 2011                   6060                5351               709                   2745                2465               280                          6060                        6060                     6060                     2745
+ 2013                   6497                5675               822                   2231                1959               272                          6060                        4983                     4896                     1735
+ 2015                   7208                6252               956                   2005                1738               267                          6060                        4631                     4580                     1527
+ 2018                   7297                6313               984                   4160                3602               558                          6060                        4294                     4269                     2815
+ 2020                   7166                6199               967                   5520                4762               758                          6060                        4155                     4077                     3145
+     Candidate Path     N  Cities  Crude_estimate     Crude_SE   Crude_lower   Crude_upper  Adjusted_estimate  Adjusted_SE  Adjusted_lower  Adjusted_upper
+Overall policy    c 16661      94   -1.189000e-01 2.644152e-02 -1.714076e-01 -6.639233e-02      -8.667948e-02 3.304536e-02   -1.523010e-01   -2.105794e-02
+         Green    a 16661      94    1.496798e+00 6.426400e-01  2.206422e-01  2.772954e+00       3.784377e-01 5.982113e-01   -8.094915e-01    1.566367e+00
+         Green    b 16661      94   -8.002934e-03 3.814844e-03 -1.557846e-02 -4.274091e-04      -7.405913e-03 3.488016e-03   -1.433242e-02   -4.794032e-04
+          Road    a 16661      94   -2.746290e-01 1.965772e+00 -4.178262e+00  3.629004e+00      -2.305227e+00 1.023349e+00   -4.337395e+00   -2.730586e-01
+          Road    b 16661      94    3.026044e-03 1.839904e-03 -6.276410e-04  6.679729e-03      -2.141447e-04 2.661037e-03   -5.498437e-03    5.070147e-03
+           SO2    a 15430      94   -3.016426e+04 4.559390e+03 -3.921830e+04 -2.111021e+04      -8.292462e+03 1.520519e+04   -3.848697e+04    2.190204e+04
+           SO2    b 15430      94   -5.328441e-07 1.351952e-07 -8.013150e-07 -2.643731e-07      -1.794922e-07 1.833444e-07   -5.435778e-07    1.845934e-07
+       Medical    a 11141      94   -6.436287e-02 6.153669e-02 -1.865625e-01  5.783679e-02       1.453625e-01 6.674933e-02    1.281157e-02    2.779135e-01
+       Medical    b 11141      94    6.437739e-02 4.751738e-02 -2.998270e-02  1.587375e-01      -1.708402e-02 4.612038e-02   -1.086700e-01    7.450191e-02
+          PM25    a 16661      94   -6.588301e+00 3.514163e+00 -1.356673e+01  3.901296e-01      -4.850085e+00 2.805024e+00   -1.042031e+01    7.201370e-01
+          PM25    b 16661      94   -2.103232e-03 6.373390e-04 -3.368861e-03 -8.376030e-04      -9.007511e-04 1.374041e-03   -3.629325e-03    1.827822e-03
+        Social    a 16660      94    1.994820e-02 3.782972e-02 -5.517413e-02  9.507052e-02       6.286888e-02 2.819586e-02    6.877482e-03    1.188603e-01
+        Social    b 16660      94   -8.973715e-02 9.667468e-03 -1.089348e-01 -7.053947e-02      -4.104266e-02 8.974428e-03   -5.886409e-02   -2.322122e-02
+Existing model estimates reproduced; original data were not modified.
+
+
+PROGRAM: export_tables.py
+Exported Table_S2_display.csv, Table_S3_display.csv and sample_reporting.txt.
+
+
+PROGRAM: verify_reference.py
+{
+  "passed": true,
+  "numeric_checks": 1195,
+  "mismatches": 0,
+  "relative_tolerance": 2e-10,
+  "absolute_tolerance": 1e-13,
+  "reference_csv_files": 13
+}
+
+
+PROGRAM: verify_stata.py
+{
+  "passed": true,
+  "checks": 582,
+  "mismatches": 0,
+  "S2_groups_of_descriptives_and_missingness": 63,
+  "S3_models": 26,
+  "all_models_94_cities_10_treated": true
+}
