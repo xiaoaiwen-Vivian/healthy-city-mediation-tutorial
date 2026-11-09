@@ -131,3 +131,23 @@ tests/                         Tests of revision-aware manuscript table reading
 ```
 
 See [GitHub upload instructions in Chinese](docs/GITHUB_UPLOAD_ZH.md). Create a tagged release matching the manuscript and cite its actual release URL or archival DOI. This review copy has not been uploaded by the packaging process, and no repository URL or code DOI has been invented.
+
+
+## Supplementary Table S4: sensitivity to individual treated cities
+
+The [treated-city sensitivity add-on](treated_city_sensitivity/README.md) provides the Stata code, aggregate results, executed log, and editable Word table for Supplementary Table S4. It re-estimates each candidate's a and b paths after omitting each of the ten treated cities in turn, retaining the candidate-specific common-sample specification. All six candidates and all ten deletions are reported. The deletion ranges describe sensitivity to individual cities; they are not confidence intervals or additional tests of the indirect associations.
+
+From the repository root, check the supplied results without individual data:
+
+```bash
+python treated_city_sensitivity/run.py check
+```
+
+To re-estimate the regressions using the authorized linked input produced by the existing `build-input` procedure:
+
+```bash
+python treated_city_sensitivity/run.py full --data "/path/to/analysis_input.dta" --stata "/path/to/stata-mp"
+```
+
+Add `--manuscript "/path/to/revised_manuscript.docx"` to either command to compare the S4 numbers with a Word manuscript. This add-on has its own entry point; the main analysis and the S2/S3 `supplementary_reporting` add-on are unchanged.
+
