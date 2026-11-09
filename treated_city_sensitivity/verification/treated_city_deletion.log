@@ -1,0 +1,523 @@
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  [RUN_DIRECTORY]/logs/treated_city_delet
+> ion.log
+  log type:  text
+ opened on:   9 Nov 2026, 17:19:24
+
+. display "Stata version: " c(stata_version)
+Stata version: 18
+
+. which reghdfe
+vendor/stata/r/reghdfe.ado
+*! version 6.13.1 10Jan2026
+
+. which ftools
+vendor/stata/f/ftools.ado
+*! version 2.50.0 09jan2026
+
+. 
+. use "`input_path'", clear
+(Harmonized CHARLS Ver.D)
+
+. rename (ID iwy treat rgoingl) (person_id year treated outcome)
+
+. rename (GreenCoverageRateBD RoadSurAreaPerCap act_12) (m_green m_road m_social)
+
+. rename 工业二氧化硫排放量吨 m_so2
+
+. rename (hosper pm) (m_medical m_pm25)
+
+. replace city=strtrim(city)
+(0 real changes made)
+
+. drop if missing(person_id) | missing(city) | missing(year)
+(1,310 observations deleted)
+
+. drop if missing(wave)
+(0 observations deleted)
+
+. keep if age>=45 & age<. & rural==0
+(51,158 observations deleted)
+
+. capture drop did
+
+. generate double did=treated*(year>=2017)
+
+. egen long city_id=group(city)
+
+. egen long respondent_id=group(person_id)
+
+. local controls gender marry log_real_inc_per rwork rural2 edu hchild retire adlab_c smoken drinkl srh age
+
+. assert inlist(treated,0,1)
+
+. bysort city_id: assert treated==treated[1]
+
+. bysort respondent_id: assert city_id==city_id[1]
+
+. 
+. reghdfe outcome did `controls', absorb(city_id year) vce(cluster respondent_id)
+(MWFE estimator converged in 5 iterations)
+
+HDFE Linear regression                            Number of obs   =     16,661
+Absorbing 2 HDFE groups                           F(  14,   7994) =      63.89
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.1318
+                                                  Adj R-squared   =     0.1260
+                                                  Within R-sq.    =     0.0968
+Number of clusters (respondent_id) =      7,995   Root MSE        =     0.6976
+
+                          (Std. err. adjusted for 7,995 clusters in respondent_id)
+----------------------------------------------------------------------------------
+                 |               Robust
+         outcome | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+             did |  -.0866795   .0278562    -3.11   0.002    -.1412849    -.032074
+          gender |  -.0461119   .0152335    -3.03   0.002    -.0759735   -.0162503
+           marry |  -.1147333   .0206277    -5.56   0.000    -.1551689   -.0742976
+log_real_inc_per |  -.0472414   .0057085    -8.28   0.000    -.0584316   -.0360511
+           rwork |    .023662   .0148073     1.60   0.110    -.0053643    .0526882
+          rural2 |   .0183742   .0186856     0.98   0.325    -.0182545    .0550028
+             edu |  -.0426202   .0065973    -6.46   0.000    -.0555526   -.0296877
+          hchild |  -.0042275   .0066622    -0.63   0.526    -.0172872    .0088322
+          retire |  -.0365471   .0160857    -2.27   0.023    -.0680792    -.005015
+         adlab_c |   .1512895    .011147    13.57   0.000     .1294384    .1731405
+          smoken |   .0268727    .016038     1.68   0.094    -.0045659    .0583114
+          drinkl |  -.0197999   .0132326    -1.50   0.135    -.0457392    .0061395
+             srh |  -.1132398   .0070289   -16.11   0.000    -.1270183   -.0994613
+             age |  -.0016141   .0009347    -1.73   0.084    -.0034463    .0002182
+           _cons |   2.359321   .0909491    25.94   0.000     2.181037    2.537604
+----------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     city_id |        94           0          94     |
+        year |         5           1           4     |
+-----------------------------------------------------+
+
+. generate byte baseline=e(sample)
+
+. assert e(N)==16661
+
+. assert reldif(_b[did],-.0866794779116242)<1e-8
+
+. quietly levelsof city_id if baseline & treated==1, local(treated_cities)
+
+. local n_treated: word count `treated_cities'
+
+. assert `n_treated'==10
+
+. tempfile eligible common results
+
+. save `eligible'
+file /var/folders/b2/mrhxck5j5898_27nb6sn5h5w0000gn/T//St73330.000001 saved as .dta format
+
+. tempname result
+
+. postfile `result' str12 Candidate str8 OmittedCity long(N Respondents Cities TreatedCities N_removed Respondents_removed) ///
+>     double(a b ab a_SE b_SE a_p b_p df_a df_b a_CI_L a_CI_U b_CI_L b_CI_U) ///
+>     byte SameSample using `results'
+
+. 
+. capture program drop fit_paths
+
+. program define fit_paths
+  1.     syntax, MED(varname) CONTROLS(string) CANDIDATE(string) OMITTED(string) ///
+>         HANDLE(name) EXPECTEDN(integer) EXPECTEDG(integer) EXPECTEDT(integer) ///
+>         REMOVED(integer) PERSONSREMOVED(integer)
+  2.     tempvar sa sb tag tagperson
+  3.     tempname a b ase bse adf bdf ap bp alo ahi blo bhi
+  4.     quietly reghdfe `med' did `controls', absorb(city_id year) vce(cluster city_id)
+  5.     generate byte `sa'=e(sample)
+  6.     scalar `a'=_b[did]
+  7.     scalar `ase'=_se[did]
+  8.     scalar `adf'=e(df_r)
+  9.     assert `ase'>0 & `ase'<.
+ 10.     assert e(N)==`expectedn'
+ 11.     assert `sa'==1
+ 12.     scalar `ap'=2*ttail(`adf',abs(`a'/`ase'))
+ 13.     scalar `alo'=`a'-invttail(`adf',.025)*`ase'
+ 14.     scalar `ahi'=`a'+invttail(`adf',.025)*`ase'
+ 15.     quietly reghdfe outcome `med' did `controls', absorb(city_id year) vce(cluster city_id)
+ 16.     generate byte `sb'=e(sample)
+ 17.     scalar `b'=_b[`med']
+ 18.     scalar `bse'=_se[`med']
+ 19.     scalar `bdf'=e(df_r)
+ 20.     assert `bse'>0 & `bse'<.
+ 21.     assert e(N)==`expectedn'
+ 22.     assert `sa'==`sb'
+ 23.     scalar `bp'=2*ttail(`bdf',abs(`b'/`bse'))
+ 24.     scalar `blo'=`b'-invttail(`bdf',.025)*`bse'
+ 25.     scalar `bhi'=`b'+invttail(`bdf',.025)*`bse'
+ 26.     egen byte `tag'=tag(city_id) if `sa'
+ 27.     quietly count if `tag'==1
+ 28.     local cities=r(N)
+ 29.     quietly count if `tag'==1 & treated==1
+ 30.     local treatedcities=r(N)
+ 31.     egen byte `tagperson'=tag(respondent_id) if `sa'
+ 32.     quietly count if `tagperson'==1
+ 33.     local persons=r(N)
+ 34.     assert `cities'==`expectedg'
+ 35.     assert `treatedcities'==`expectedt'
+ 36.     assert `adf'==`expectedg'-1
+ 37.     assert `bdf'==`expectedg'-1
+ 38.     post `handle' ("`candidate'") ("`omitted'") (`expectedn') (`persons') (`cities') (`treatedcities') ///
+>         (`removed') (`personsremoved') (`a') (`b') (`a'*`b') (`ase') (`bse') (`ap') (`bp') ///
+>         (`adf') (`bdf') (`alo') (`ahi') (`blo') (`bhi') (1)
+ 39.     display "FIT `candidate' | omitted `omitted' | N=" `expectedn' " | cities=" `cities' " | treated=" `treatedcities' ///
+>         " | a=" %18.12g `a' " | b=" %18.12g `b' " | ab=" %18.12g (`a'*`b')
+ 40. end
+
+. 
+. local labels Green Road SO2 Medical PM25 Social
+
+. local mediators m_green m_road m_so2 m_medical m_pm25 m_social
+
+. local expected_n 16661 16661 15430 11141 16661 16660
+
+. forvalues j=1/6 {
+  2.     use `eligible', clear
+  3.     local med: word `j' of `mediators'
+  4.     local label: word `j' of `labels'
+  5.     local n_expected: word `j' of `expected_n'
+  6.     quietly reghdfe outcome `med' did `controls' if baseline, absorb(city_id year) vce(cluster respondent_id)
+  7.     generate byte common=e(sample)
+  8.     keep if common
+  9.     assert _N==`n_expected'
+ 10.     save `common', replace
+ 11.     fit_paths, med(`med') controls("`controls'") candidate(`label') omitted(Full) handle(`result') ///
+>         expectedn(`n_expected') expectedg(94) expectedt(10) removed(0) personsremoved(0)
+ 12.     forvalues k=1/10 {
+ 13.         use `common', clear
+ 14.         local omitted_city: word `k' of `treated_cities'
+ 15.         local alias= "T" + string(`k',"%02.0f")
+ 16.         quietly count if city_id==`omitted_city'
+ 17.         local removed=r(N)
+ 18.         assert `removed'>0
+ 19.         tempvar person_tag
+ 20.         egen byte `person_tag'=tag(respondent_id) if city_id==`omitted_city'
+ 21.         quietly count if `person_tag'==1
+ 22.         local persons_removed=r(N)
+ 23.         drop if city_id==`omitted_city'
+ 24.         local n_retained=_N
+ 25.         assert `n_retained'==`n_expected'-`removed'
+ 26.         fit_paths, med(`med') controls("`controls'") candidate(`label') omitted(`alias') handle(`result') ///
+>             expectedn(`n_retained') expectedg(93) expectedt(9) removed(`removed') personsremoved(`persons_removed')
+ 27.     }
+ 28. }
+(Harmonized CHARLS Ver.D)
+(17,567 observations deleted)
+(file /var/folders/b2/mrhxck5j5898_27nb6sn5h5w0000gn/T//St73330.000002 not found)
+file /var/folders/b2/mrhxck5j5898_27nb6sn5h5w0000gn/T//St73330.000002 saved as .dta format
+FIT Green | omitted Full | N=16661 | cities=94 | treated=10 | a=     .378437668988 | b=  -.00740591259908 | ab=  -.00280267630072
+(Harmonized CHARLS Ver.D)
+(122 observations deleted)
+FIT Green | omitted T01 | N=16539 | cities=93 | treated=9 | a=     .533230827649 | b=  -.00731222616579 | ab=  -.00389910441034
+(Harmonized CHARLS Ver.D)
+(63 observations deleted)
+FIT Green | omitted T02 | N=16598 | cities=93 | treated=9 | a=      .40596287257 | b=  -.00747726086333 | ab=  -.00303549029903
+(Harmonized CHARLS Ver.D)
+(124 observations deleted)
+FIT Green | omitted T03 | N=16537 | cities=93 | treated=9 | a=     .601596275168 | b=  -.00738113257761 | ab=  -.00444046186521
+(Harmonized CHARLS Ver.D)
+(98 observations deleted)
+FIT Green | omitted T04 | N=16563 | cities=93 | treated=9 | a=     .315127908223 | b=  -.00749351777686 | ab=  -.00236141658225
+(Harmonized CHARLS Ver.D)
+(380 observations deleted)
+FIT Green | omitted T05 | N=16281 | cities=93 | treated=9 | a=     .452030337611 | b=  -.00749860093804 | ab=  -.00338959511363
+(Harmonized CHARLS Ver.D)
+(535 observations deleted)
+FIT Green | omitted T06 | N=16126 | cities=93 | treated=9 | a=     .102818923986 | b=  -.00713495717632 | ab= -.000733608619554
+(Harmonized CHARLS Ver.D)
+(95 observations deleted)
+FIT Green | omitted T07 | N=16566 | cities=93 | treated=9 | a=     .392146748854 | b=  -.00742004885471 | ab=  -.00290974803471
+(Harmonized CHARLS Ver.D)
+(316 observations deleted)
+FIT Green | omitted T08 | N=16345 | cities=93 | treated=9 | a=     .367094217263 | b=  -.00748147174391 | ab=  -.00274640501381
+(Harmonized CHARLS Ver.D)
+(54 observations deleted)
+FIT Green | omitted T09 | N=16607 | cities=93 | treated=9 | a=     .410788640131 | b=   -.0073583117337 | ab=  -.00302271087075
+(Harmonized CHARLS Ver.D)
+(348 observations deleted)
+FIT Green | omitted T10 | N=16313 | cities=93 | treated=9 | a=     .104609869858 | b=  -.00755781351601 | ab= -.000790621888323
+(Harmonized CHARLS Ver.D)
+(17,567 observations deleted)
+file /var/folders/b2/mrhxck5j5898_27nb6sn5h5w0000gn/T//St73330.000002 saved as .dta format
+FIT Road | omitted Full | N=16661 | cities=94 | treated=10 | a=    -2.30522668122 | b=  -.00021414472414 | ab=  .000493652131729
+(Harmonized CHARLS Ver.D)
+(122 observations deleted)
+FIT Road | omitted T01 | N=16539 | cities=93 | treated=9 | a=    -2.46445325984 | b= -.000460169389802 | ab=   .00113406595277
+(Harmonized CHARLS Ver.D)
+(63 observations deleted)
+FIT Road | omitted T02 | N=16598 | cities=93 | treated=9 | a=    -2.34173306438 | b= -.000176548972778 | ab=  .000413430567035
+(Harmonized CHARLS Ver.D)
+(124 observations deleted)
+FIT Road | omitted T03 | N=16537 | cities=93 | treated=9 | a=    -2.62505637211 | b= -.000176119441389 | ab=  .000462323461871
+(Harmonized CHARLS Ver.D)
+(98 observations deleted)
+FIT Road | omitted T04 | N=16563 | cities=93 | treated=9 | a=    -2.20887583862 | b=-.0000795156118859 | ab=  .000175640113888
+(Harmonized CHARLS Ver.D)
+(380 observations deleted)
+FIT Road | omitted T05 | N=16281 | cities=93 | treated=9 | a=    -1.96180440916 | b= -.000177876902403 | ab=  .000348959691421
+(Harmonized CHARLS Ver.D)
+(535 observations deleted)
+FIT Road | omitted T06 | N=16126 | cities=93 | treated=9 | a=     -2.6288995112 | b=  .000210935183727 | ab= -.000554527401394
+(Harmonized CHARLS Ver.D)
+(95 observations deleted)
+FIT Road | omitted T07 | N=16566 | cities=93 | treated=9 | a=    -2.24818836707 | b= -.000239640316489 | ab=   .00053875657181
+(Harmonized CHARLS Ver.D)
+(316 observations deleted)
+FIT Road | omitted T08 | N=16345 | cities=93 | treated=9 | a=    -1.53027346724 | b= -.000436357889842 | ab=  .000667746901047
+(Harmonized CHARLS Ver.D)
+(54 observations deleted)
+FIT Road | omitted T09 | N=16607 | cities=93 | treated=9 | a=    -2.29804148095 | b= -.000335407352252 | ab=  .000770780008492
+(Harmonized CHARLS Ver.D)
+(348 observations deleted)
+FIT Road | omitted T10 | N=16313 | cities=93 | treated=9 | a=    -2.74377411997 | b=  -.00037297118613 | ab=     .001023348688
+(Harmonized CHARLS Ver.D)
+(18,798 observations deleted)
+file /var/folders/b2/mrhxck5j5898_27nb6sn5h5w0000gn/T//St73330.000002 saved as .dta format
+FIT SO2 | omitted Full | N=15430 | cities=94 | treated=10 | a=    -8292.46247305 | b=-1.79492198152e-07 | ab=   .00148843231738
+(Harmonized CHARLS Ver.D)
+(122 observations deleted)
+FIT SO2 | omitted T01 | N=15308 | cities=93 | treated=9 | a=    -10991.7202016 | b=-1.76915085627e-07 | ab=   .00194460112065
+(Harmonized CHARLS Ver.D)
+(63 observations deleted)
+FIT SO2 | omitted T02 | N=15367 | cities=93 | treated=9 | a=    -7541.61357822 | b=-1.84864339797e-07 | ab=   .00139417541514
+(Harmonized CHARLS Ver.D)
+(124 observations deleted)
+FIT SO2 | omitted T03 | N=15306 | cities=93 | treated=9 | a=     -10868.962121 | b=-1.84359908365e-07 | ab=   .00200380086066
+(Harmonized CHARLS Ver.D)
+(98 observations deleted)
+FIT SO2 | omitted T04 | N=15332 | cities=93 | treated=9 | a=    -5416.99503171 | b=-1.69486960087e-07 | ab=  .000918110020731
+(Harmonized CHARLS Ver.D)
+(380 observations deleted)
+FIT SO2 | omitted T05 | N=15050 | cities=93 | treated=9 | a=    -16574.5405993 | b=-1.85284046981e-07 | ab=   .00307099795907
+(Harmonized CHARLS Ver.D)
+(356 observations deleted)
+FIT SO2 | omitted T06 | N=15074 | cities=93 | treated=9 | a=    -13482.7741296 | b=-1.79836754242e-07 | ab=   .00242469833765
+(Harmonized CHARLS Ver.D)
+(95 observations deleted)
+FIT SO2 | omitted T07 | N=15335 | cities=93 | treated=9 | a=    -8058.35734112 | b=-1.79159036608e-07 | ab=   .00144372753788
+(Harmonized CHARLS Ver.D)
+(232 observations deleted)
+FIT SO2 | omitted T08 | N=15198 | cities=93 | treated=9 | a=    -7000.12563207 | b=-1.80899102220e-07 | ab=   .00126631644227
+(Harmonized CHARLS Ver.D)
+(54 observations deleted)
+FIT SO2 | omitted T09 | N=15376 | cities=93 | treated=9 | a=    -7037.89627285 | b=-1.80720157736e-07 | ab=   .00127188972456
+(Harmonized CHARLS Ver.D)
+(348 observations deleted)
+FIT SO2 | omitted T10 | N=15082 | cities=93 | treated=9 | a=     3890.92962624 | b=-1.84659523666e-07 | ab= -.000718497211398
+(Harmonized CHARLS Ver.D)
+(23,087 observations deleted)
+file /var/folders/b2/mrhxck5j5898_27nb6sn5h5w0000gn/T//St73330.000002 saved as .dta format
+FIT Medical | omitted Full | N=11141 | cities=94 | treated=10 | a=     .145362510736 | b=   -.0170840223865 | ab=  -.00248337638758
+(Harmonized CHARLS Ver.D)
+(73 observations deleted)
+FIT Medical | omitted T01 | N=11068 | cities=93 | treated=9 | a=     .146776638334 | b=   -.0170176789696 | ab=  -.00249779771141
+(Harmonized CHARLS Ver.D)
+(28 observations deleted)
+FIT Medical | omitted T02 | N=11113 | cities=93 | treated=9 | a=     .145954016886 | b=   -.0180885217233 | ab=  -.00264009240504
+(Harmonized CHARLS Ver.D)
+(82 observations deleted)
+FIT Medical | omitted T03 | N=11059 | cities=93 | treated=9 | a=     .148129851796 | b=   -.0168399528118 | ab=  -.00249449971427
+(Harmonized CHARLS Ver.D)
+(66 observations deleted)
+FIT Medical | omitted T04 | N=11075 | cities=93 | treated=9 | a=     .143906116593 | b=   -.0170587017866 | ab=  -.00245485152824
+(Harmonized CHARLS Ver.D)
+(228 observations deleted)
+FIT Medical | omitted T05 | N=10913 | cities=93 | treated=9 | a=     .202297281901 | b=   -.0156521179039 | ab=  -.00316638090796
+(Harmonized CHARLS Ver.D)
+(356 observations deleted)
+FIT Medical | omitted T06 | N=10785 | cities=93 | treated=9 | a=     .108749375487 | b=    -.015193180024 | ab=  -.00165224883926
+(Harmonized CHARLS Ver.D)
+(59 observations deleted)
+FIT Medical | omitted T07 | N=11082 | cities=93 | treated=9 | a=     .141566276506 | b=   -.0170971474793 | ab=  -.00242037950753
+(Harmonized CHARLS Ver.D)
+(225 observations deleted)
+FIT Medical | omitted T08 | N=10916 | cities=93 | treated=9 | a=     .135762121952 | b=   -.0170493115829 | ab=  -.00231465071831
+(Harmonized CHARLS Ver.D)
+(24 observations deleted)
+FIT Medical | omitted T09 | N=11117 | cities=93 | treated=9 | a=     .145392621466 | b=   -.0170624602869 | ab=  -.00248075582977
+(Harmonized CHARLS Ver.D)
+(236 observations deleted)
+FIT Medical | omitted T10 | N=10905 | cities=93 | treated=9 | a=     .131744520149 | b=   -.0179782649494 | ab=  -.00236853788888
+(Harmonized CHARLS Ver.D)
+(17,567 observations deleted)
+file /var/folders/b2/mrhxck5j5898_27nb6sn5h5w0000gn/T//St73330.000002 saved as .dta format
+FIT PM25 | omitted Full | N=16661 | cities=94 | treated=10 | a=    -4.85008452195 | b= -.000900751148233 | ab=   .00436871920217
+(Harmonized CHARLS Ver.D)
+(122 observations deleted)
+FIT PM25 | omitted T01 | N=16539 | cities=93 | treated=9 | a=    -5.38887605684 | b= -.000887426882789 | ab=   .00478223348085
+(Harmonized CHARLS Ver.D)
+(63 observations deleted)
+FIT PM25 | omitted T02 | N=16598 | cities=93 | treated=9 | a=    -4.98194472208 | b=  -.00089951587246 | ab=   .00448133835323
+(Harmonized CHARLS Ver.D)
+(124 observations deleted)
+FIT PM25 | omitted T03 | N=16537 | cities=93 | treated=9 | a=    -5.21058213931 | b= -.000894727624095 | ab=   .00466205177766
+(Harmonized CHARLS Ver.D)
+(98 observations deleted)
+FIT PM25 | omitted T04 | N=16563 | cities=93 | treated=9 | a=    -5.20733280052 | b=   -.0010015809592 | ab=   .00521556538123
+(Harmonized CHARLS Ver.D)
+(380 observations deleted)
+FIT PM25 | omitted T05 | N=16281 | cities=93 | treated=9 | a=    -6.78378453845 | b=  -.00109454484242 | ab=   .00742515637863
+(Harmonized CHARLS Ver.D)
+(535 observations deleted)
+FIT PM25 | omitted T06 | N=16126 | cities=93 | treated=9 | a=    -4.12195076817 | b=  -.00119634122536 | ab=   .00493125963286
+(Harmonized CHARLS Ver.D)
+(95 observations deleted)
+FIT PM25 | omitted T07 | N=16566 | cities=93 | treated=9 | a=    -5.07762663575 | b= -.000931842989959 | ab=   .00473155078615
+(Harmonized CHARLS Ver.D)
+(316 observations deleted)
+FIT PM25 | omitted T08 | N=16345 | cities=93 | treated=9 | a=    -3.62695287325 | b= -.000970958677373 | ab=   .00352162136471
+(Harmonized CHARLS Ver.D)
+(54 observations deleted)
+FIT PM25 | omitted T09 | N=16607 | cities=93 | treated=9 | a=    -4.82714500306 | b= -.000915393954052 | ab=   .00441873935113
+(Harmonized CHARLS Ver.D)
+(348 observations deleted)
+FIT PM25 | omitted T10 | N=16313 | cities=93 | treated=9 | a=    -2.96065397411 | b= -.000704974524888 | ab=   .00208718562876
+(Harmonized CHARLS Ver.D)
+(17,568 observations deleted)
+file /var/folders/b2/mrhxck5j5898_27nb6sn5h5w0000gn/T//St73330.000002 saved as .dta format
+FIT Social | omitted Full | N=16660 | cities=94 | treated=10 | a=    .0628688794914 | b=   -.0410426571615 | ab=  -.00258030586709
+(Harmonized CHARLS Ver.D)
+(122 observations deleted)
+FIT Social | omitted T01 | N=16538 | cities=93 | treated=9 | a=    .0625557214654 | b=   -.0413262193595 | ab=  -.00258519146747
+(Harmonized CHARLS Ver.D)
+(63 observations deleted)
+FIT Social | omitted T02 | N=16597 | cities=93 | treated=9 | a=    .0608256858885 | b=   -.0415541066219 | ab=  -.00252755703676
+(Harmonized CHARLS Ver.D)
+(124 observations deleted)
+FIT Social | omitted T03 | N=16536 | cities=93 | treated=9 | a=     .069634172544 | b=   -.0424253400491 | ab=  -.00295425344922
+(Harmonized CHARLS Ver.D)
+(98 observations deleted)
+FIT Social | omitted T04 | N=16562 | cities=93 | treated=9 | a=    .0663377115427 | b=   -.0404120182047 | ab=  -.00268084080652
+(Harmonized CHARLS Ver.D)
+(380 observations deleted)
+FIT Social | omitted T05 | N=16280 | cities=93 | treated=9 | a=    .0534061276485 | b=   -.0417811997816 | ab=  -.00223137208884
+(Harmonized CHARLS Ver.D)
+(535 observations deleted)
+FIT Social | omitted T06 | N=16125 | cities=93 | treated=9 | a=    .0570479171906 | b=   -.0389547339409 | ab=  -.00222228643604
+(Harmonized CHARLS Ver.D)
+(95 observations deleted)
+FIT Social | omitted T07 | N=16565 | cities=93 | treated=9 | a=    .0490805432499 | b=    -.041646899073 | ab=  -.00204405243118
+(Harmonized CHARLS Ver.D)
+(316 observations deleted)
+FIT Social | omitted T08 | N=16344 | cities=93 | treated=9 | a=    .0814298866963 | b=   -.0412901028381 | ab=  -.00336224839578
+(Harmonized CHARLS Ver.D)
+(54 observations deleted)
+FIT Social | omitted T09 | N=16606 | cities=93 | treated=9 | a=    .0696516866655 | b=   -.0412627731057 | ab=  -.00287402174331
+(Harmonized CHARLS Ver.D)
+(348 observations deleted)
+FIT Social | omitted T10 | N=16312 | cities=93 | treated=9 | a=    .0581529774179 | b=   -.0408870479302 | ab=  -.00237770357497
+
+. postclose `result'
+
+. use `results', clear
+
+. assert _N==66
+
+. bysort Candidate: assert _N==11
+
+. assert SameSample==1
+
+. format a b ab a_SE b_SE a_p b_p a_CI_L a_CI_U b_CI_L b_CI_U %21.15g
+
+. export delimited using "results/treated_city_deletion_raw.csv", replace
+(file results/treated_city_deletion_raw.csv not found)
+file results/treated_city_deletion_raw.csv saved
+
+. list Candidate OmittedCity N Cities TreatedCities a b ab, noobs sepby(Candidate)
+
+  +--------------------------------------------------------------------------------------------------------------------+
+  | Candid~e   Omitte~y       N   Cities   Treate~s                   a                       b                     ab |
+  |--------------------------------------------------------------------------------------------------------------------|
+  |    Green        T05   16281       93          9    .452030337610834     -.00749860093803636     -.0033895951136295 |
+  |    Green        T03   16537       93          9    .601596275168209     -.00738113257760917     -.0044404618652124 |
+  |    Green       Full   16661       94         10    .378437668987756     -.00740591259907662    -.00280267630072161 |
+  |    Green        T01   16539       93          9    .533230827648907     -.00731222616579085    -.00389910441034065 |
+  |    Green        T02   16598       93          9    .405962872569768     -.00747726086332708    -.00303549029902976 |
+  |    Green        T06   16126       93          9    .102818923985813     -.00713495717631543   -.000733608619553607 |
+  |    Green        T04   16563       93          9    .315127908222612     -.00749351777685595    -.00236141658224957 |
+  |    Green        T07   16566       93          9    .392146748853561     -.00742004885470752    -.00290974803470814 |
+  |    Green        T10   16313       93          9     .10460986985828     -.00755781351600972   -.000790621888322929 |
+  |    Green        T08   16345       93          9    .367094217262883     -.00748147174391374    -.00274640501380639 |
+  |    Green        T09   16607       93          9    .410788640131191       -.007358311733697    -.00302271087074678 |
+  |--------------------------------------------------------------------------------------------------------------------|
+  |  Medical        T04   11075       93          9    .143906116593359      -.0170587017866252    -.00245485152823743 |
+  |  Medical        T10   10905       93          9    .131744520148964      -.0179782649494452    -.00236853788887559 |
+  |  Medical        T08   10916       93          9    .135762121951984      -.0170493115828977    -.00231465071831473 |
+  |  Medical        T09   11117       93          9    .145392621465533      -.0170624602869101     -.0024807558297654 |
+  |  Medical        T05   10913       93          9    .202297281901072      -.0156521179039413    -.00316638090796243 |
+  |  Medical        T07   11082       93          9    .141566276506439       -.017097147479305    -.00242037950752665 |
+  |  Medical        T03   11059       93          9    .148129851795825      -.0168399528118318    -.00249449971426533 |
+  |  Medical       Full   11141       94         10    .145362510736397      -.0170840223865383    -.00248337638758402 |
+  |  Medical        T02   11113       93          9    .145954016885835      -.0180885217233024    -.00264009240504267 |
+  |  Medical        T01   11068       93          9    .146776638333974      -.0170176789696231    -.00249779771140804 |
+  |  Medical        T06   10785       93          9     .10874937548653      -.0151931800239523    -.00165224883925923 |
+  |--------------------------------------------------------------------------------------------------------------------|
+  |     PM25        T01   16539       93          9   -5.38887605683768    -.000887426882788688     .00478223348085405 |
+  |     PM25        T04   16563       93          9   -5.20733280051868     -.00100158095920177     .00521556538122634 |
+  |     PM25        T03   16537       93          9   -5.21058213930908    -.000894727624095123      .0046620517776565 |
+  |     PM25        T09   16607       93          9   -4.82714500306037    -.000915393954051601     .00441873935113186 |
+  |     PM25        T07   16566       93          9   -5.07762663575039    -.000931842989958584     .00473155078615099 |
+  |     PM25       Full   16661       94         10   -4.85008452195189    -.000900751148232857     .00436871920217457 |
+  |     PM25        T05   16281       93          9   -6.78378453844848     -.00109454484241709     .00742515637862761 |
+  |     PM25        T10   16313       93          9   -2.96065397411019    -.000704974524888451     .00208718562875744 |
+  |     PM25        T02   16598       93          9   -4.98194472207704    -.000899515872460464     .00448133835322893 |
+  |     PM25        T06   16126       93          9   -4.12195076816867     -.00119634122535883     .00493125963285967 |
+  |     PM25        T08   16345       93          9   -3.62695287325171    -.000970958677373442     .00352162136470829 |
+  |--------------------------------------------------------------------------------------------------------------------|
+  |     Road        T06   16126       93          9   -2.62889951119705     .000210935183726986   -.000554527401394133 |
+  |     Road        T01   16539       93          9   -2.46445325983638    -.000460169389801924     .00113406595277427 |
+  |     Road        T09   16607       93          9   -2.29804148095308    -.000335407352251959    .000770780008491643 |
+  |     Road        T05   16281       93          9   -1.96180440915727    -.000177876902402596     .00034895969142065 |
+  |     Road        T03   16537       93          9   -2.62505637210639    -.000176119441389317    .000462323461870844 |
+  |     Road       Full   16661       94         10   -2.30522668121577    -.000214144724139846    .000493652131728764 |
+  |     Road        T02   16598       93          9   -2.34173306437743     -.00017654897277768    .000413430567035364 |
+  |     Road        T08   16345       93          9   -1.53027346724214    -.000436357889841997    .000667746901046978 |
+  |     Road        T04   16563       93          9   -2.20887583862087   -.0000795156118858599     .00017564011388783 |
+  |     Road        T10   16313       93          9   -2.74377411996746    -.000372971186129855     .00102334868799666 |
+  |     Road        T07   16566       93          9   -2.24818836706856    -.000239640316488623    .000538756571810351 |
+  |--------------------------------------------------------------------------------------------------------------------|
+  |      SO2        T06   15074       93          9   -13482.7741296474   -1.79836754241819e-07     .00242469833765134 |
+  |      SO2        T03   15306       93          9   -10868.9621210205   -1.84359908365428e-07     .00200380086065865 |
+  |      SO2        T02   15367       93          9   -7541.61357821505   -1.84864339797476e-07      .0013941754151444 |
+  |      SO2        T09   15376       93          9   -7037.89627285354   -1.80720157735716e-07      .0012718897245577 |
+  |      SO2       Full   15430       94         10    -8292.4624730508   -1.79492198152115e-07     .00148843231738181 |
+  |      SO2        T07   15335       93          9   -8058.35734112064   -1.79159036608245e-07     .00144372753788016 |
+  |      SO2        T05   15050       93          9   -16574.5405992663   -1.85284046980513e-07     .00307099795907487 |
+  |      SO2        T04   15332       93          9   -5416.99503170782   -1.69486960087123e-07    .000918110020731205 |
+  |      SO2        T01   15308       93          9   -10991.7202015983   -1.76915085627071e-07     .00194460112065457 |
+  |      SO2        T10   15082       93          9    3890.92962623802   -1.84659523665689e-07   -.000718497211397832 |
+  |      SO2        T08   15198       93          9   -7000.12563207381   -1.80899102220179e-07     .00126631644227061 |
+  |--------------------------------------------------------------------------------------------------------------------|
+  |   Social        T09   16606       93          9   .0696516866655392       -.041262773105675    -.00287402174330771 |
+  |   Social        T05   16280       93          9   .0534061276485166      -.0417811997815755    -.00223137208884299 |
+  |   Social        T10   16312       93          9   .0581529774179394      -.0408870479302131    -.00237770357497189 |
+  |   Social        T03   16536       93          9   .0696341725440173      -.0424253400491436    -.00295425344922067 |
+  |   Social        T07   16565       93          9   .0490805432499481      -.0416468990730153    -.00204405243117935 |
+  |   Social        T08   16344       93          9   .0814298866962516      -.0412901028380846    -.00336224839578181 |
+  |   Social       Full   16660       94         10   .0628688794913728      -.0410426571615288    -.00258030586709388 |
+  |   Social        T06   16125       93          9   .0570479171905655      -.0389547339408623    -.00222228643603882 |
+  |   Social        T01   16538       93          9   .0625557214653691      -.0413262193594749    -.00258519146746806 |
+  |   Social        T04   16562       93          9    .066337711542683       -.040412018204678    -.00268084080651958 |
+  |   Social        T02   16597       93          9   .0608256858885174      -.0415541066219376    -.00252755703676394 |
+  +--------------------------------------------------------------------------------------------------------------------+
+
+. display "RR2_LOTO_SUCCESS: all six full samples and 60 treated-city deletions completed; 132 path regressions."
+RR2_LOTO_SUCCESS: all six full samples and 60 treated-city deletions completed; 132 path regressions.
+
+. display "Deletion ranges are influence diagnostics, not confidence intervals. No ab hypothesis test is computed by deletion."
+Deletion ranges are influence diagnostics, not confidence intervals. No ab hypothesis test is computed by deletion.
+
+. log close
+      name:  <unnamed>
+       log:  [RUN_DIRECTORY]/logs/treated_city_delet
+> ion.log
+  log type:  text
+ closed on:   9 Nov 2026, 17:19:41
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
